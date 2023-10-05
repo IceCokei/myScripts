@@ -30,9 +30,13 @@ while :; do
             ;;
         3)
             echo "正在更新 ElmTool...💬"
+            echo "开始执行 删除运行容器...✅"
             docker stop elmWeb && docker rm elmWeb
+            echo "开始执行 删除残留镜像...✅"
             docker rmi marisn/elmweb
+            echo "开始执行 拉取最新镜像...✅"
             docker pull marisn/elmweb
+            echo "开始执行 安装最新版本...✅"
             docker run -dit \
               -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
               -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
