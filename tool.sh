@@ -11,6 +11,7 @@ function display_main_menu {
     fi
     
     VERSION=$(echo $JSON_DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['version'])")
+    MESSAGE=$(echo $JSON_DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['message'])")
     
     # 检查Python命令是否成功执行
     if [ $? -ne 0 ]; then
@@ -27,16 +28,19 @@ function display_main_menu {
     echo -e "\033[1;36m                                         \033[0m"
 
     echo -e "\033[1;37mCokeTooL一键脚本工具 $VERSION （支持Ubuntu，Debian，Centos系统）\033[0m"
+
     
     echo "***********************"
     
     echo "1. 系统信息查询"
-    echo "2. ElmTool 工具 > "
+    echo "2. ElmTool 选项 > "
     echo "3. 实用工具 > "
     echo "4. Docker 管理 > "
     echo "5. 系统工具 > "
-    echo "00. 版本日志"
     echo "0. 退出"
+    echo "***********************"
+    echo "00. 版本日志"
+    
 }
 
 function display_elmtool_menu {
@@ -94,6 +98,12 @@ function system_update {
     else
         echo "无法确定您的操作系统类型！"
     fi
+}
+
+function display_message_menu {
+    clear
+    echo "0. 返回"
+
 }
 
 while :; do
@@ -273,6 +283,21 @@ case $choice in
                 esac
             done
             ;;
+        00)
+            clear
+            echo -e "$MESSAGE"  
+            echo "***********************"
+            read -p "按任意键返回主菜单... " pause
+            ;;
+        0)
+            break
+            ;;
+        *)
+            clear
+            echo "❌无效选项 $choice"
+            read -p "按任意键继续... " pause
+            ;;
+            
         0)
             break
             ;;
