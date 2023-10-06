@@ -9,8 +9,8 @@ function display_main_menu {
     echo "|_|\_\|_____|   |_|  \___/  \___/ |_____|"
     echo "                                         "
     echo "1. 安装 Docker"
-    echo "2. ElmTool 选项"
-    echo "3. 实用工具"
+    echo "2. ElmTool 选项 > "
+    echo "3. 实用工具 > "
     echo "0. 退出"
 }
 
