@@ -6,7 +6,7 @@ function display_main_menu {
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
-        echo "❌"
+        echo "❌: 无法解析版本数据"
         exit 1
     fi
     
