@@ -52,7 +52,9 @@ while :; do
         1)
             clear
             echo "正在安装 Docker...💬"
-            # Docker installation commands here
+            curl -fsSL https://get.docker.com | bash
+            curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
             echo "Docker 安装完成 🚀"
             read -p "按任意键继续... " pause
             ;;
@@ -65,14 +67,29 @@ while :; do
                     1)
                         clear
                         echo "正在安装 ElmTool...💬"
-                        # ElmTool installation commands here
+                        docker run -dit \
+                          -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
+                          -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
+                          --network host \
+                          --name elmWeb \
+                          --restart unless-stopped \
+                          marisn/elmweb:latest
                         echo "ElmTool 安装完成 🚀"
                         read -p "按任意键继续... " pause
                         ;;
                     2)
                         clear
                         echo "正在更新 ElmTool...💬"
-                        # ElmTool update commands here
+                        docker stop elmWeb && docker rm elmWeb
+                        docker rmi marisn/elmweb
+                        docker pull marisn/elmweb
+                        docker run -dit \
+                          -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
+                          -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
+                          --network host \
+                          --name elmWeb \
+                          --restart unless-stopped \
+                          marisn/elmweb:latest
                         echo "ElmTool 更新完成✅"
                         read -p "按任意键继续... " pause
                         ;;
