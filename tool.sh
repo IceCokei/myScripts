@@ -29,33 +29,8 @@ function display_utility_menu {
     echo "2. 流媒体检测"
     echo "3. 一键搭建X-ui"
     echo "4. 测速"
-    echo "5. 一键申请SSL证书"
     echo "0. 返回"
 }
-
-# 定义日志和确认函数
-LOGD() {
-    echo "[DEBUG] $1"
-}
-
-LOGI() {
-    echo "[INFO]  $1"
-}
-
-LOGE() {
-    echo "[ERROR] $1"
-}
-
-confirm() {
-    read -p "$1 " response
-    [[ "$response" =~ ^(yes|y|Y)$ ]]
-    return $?
-}
-
-show_menu() {
-    display_utility_menu
-}
-
 
 function system_update {
     clear
@@ -67,81 +42,6 @@ function system_update {
         apt update -y
     else
         echo "无法确定您的操作系统类型！"
-    fi
-}
-
-ssl_cert_issue() {
-    echo -E ""
-    LOGD "******使用说明******"
-    LOGI "该脚本将使用Acme脚本申请证书,使用时需保证:"
-    LOGI "1.知晓Cloudflare 注册邮箱"
-    LOGI "2.知晓Cloudflare Global API Key"
-    LOGI "3.域名已通过Cloudflare进行解析到当前服务器"
-    LOGI "4.该脚本申请证书默认安装路径为/root/cert目录"
-    confirm "我已确认以上内容[y/n]" "y"
-    if [ $? -eq 0 ]; then
-        cd ~
-        LOGI "安装Acme脚本"
-        curl https://get.acme.sh | sh
-        if [ $? -ne 0 ]; then
-            LOGE "安装acme脚本失败"
-            exit 1
-        fi
-        CF_Domain=""
-        CF_GlobalKey=""
-        CF_AccountEmail=""
-        certPath=/root/cert
-        if [ ! -d "$certPath" ]; then
-            mkdir $certPath
-        else
-            rm -rf $certPath
-            mkdir $certPath
-        fi
-        LOGD "请设置域名:"
-        read -p "Input your domain here:" CF_Domain
-        LOGD "你的域名设置为:${CF_Domain}"
-        LOGD "请设置API密钥:"
-        read -p "Input your key here:" CF_GlobalKey
-        LOGD "你的API密钥为:${CF_GlobalKey}"
-        LOGD "请设置注册邮箱:"
-        read -p "Input your email here:" CF_AccountEmail
-        LOGD "你的注册邮箱为:${CF_AccountEmail}"
-        ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-        if [ $? -ne 0 ]; then
-            LOGE "修改默认CA为Lets'Encrypt失败,脚本退出"
-            exit 1
-        fi
-        export CF_Key="${CF_GlobalKey}"
-        export CF_Email=${CF_AccountEmail}
-        ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${CF_Domain} -d *.${CF_Domain} --log
-        if [ $? -ne 0 ]; then
-            LOGE "证书签发失败,脚本退出"
-            exit 1
-        else
-            LOGI "证书签发成功,安装中..."
-        fi
-        ~/.acme.sh/acme.sh --installcert -d ${CF_Domain} -d *.${CF_Domain} --ca-file /root/cert/ca.cer \
-        --cert-file /root/cert/${CF_Domain}.cer --key-file /root/cert/${CF_Domain}.key \
-        --fullchain-file /root/cert/fullchain.cer
-        if [ $? -ne 0 ]; then
-            LOGE "证书安装失败,脚本退出"
-            exit 1
-        else
-            LOGI "证书安装成功,开启自动更新..."
-        fi
-        ~/.acme.sh/acme.sh --upgrade --auto-upgrade
-        if [ $? -ne 0 ]; then
-            LOGE "自动更新设置失败,脚本退出"
-            ls -lah cert
-            chmod 755 $certPath
-            exit 1
-        else
-            LOGI "证书已安装且已开启自动更新,具体信息如下"
-            ls -lah cert
-            chmod 755 $certPath
-        fi
-    else
-        show_menu
     fi
 }
 
@@ -181,9 +81,13 @@ while :; do
                     2)
                         clear
                         echo "正在更新 ElmTool...💬"
+                        echo "开始执行 删除运行容器...✅"
                         docker stop elmWeb && docker rm elmWeb
+                        echo "开始执行 删除依赖镜像...✅"
                         docker rmi marisn/elmweb
+                        echo "开始执行 获取最新镜像...✅"
                         docker pull marisn/elmweb
+                        echo "开始执行 执行安装镜像...✅"
                         docker run -dit \
                           -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
                           -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
@@ -233,10 +137,6 @@ while :; do
                         clear
                         echo "测速"
                         curl -Lso- bench.sh | bash
-                        read -p "按任意键继续... " pause
-                        ;;
-                    5)
-                        ssl_cert_issue
                         read -p "按任意键继续... " pause
                         ;;
                     0)
