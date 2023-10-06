@@ -1,6 +1,10 @@
 #!/bin/bash
 
 function display_main_menu {
+    # 从 version.json 读取
+    VERSION=$(jq -r '.version' version.json)
+    MESSAGE=$(jq -r '.message' version.json)
+    
     clear
     echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
     echo -e "\033[1;32m| |/ /| |     |_   _|/ _ \  / _ \ | |    \033[0m"
@@ -9,7 +13,9 @@ function display_main_menu {
     echo -e "\033[1;35m|_|\_\|_____|   |_|  \___/  \___/ |_____| \033[0m"
     echo -e "\033[1;36m                                         \033[0m"
 
-    echo -e "\033[1;37mCokeTooL一键脚本工具 v1.0.1 （支持Ubuntu，Debian，Centos系统）\033[0m"
+    echo -e "\033[1;37mCokeTooL一键脚本工具 $VERSION （支持Ubuntu，Debian，Centos系统）\033[0m"
+    
+}
 
     echo "***********************"
     
