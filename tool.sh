@@ -10,6 +10,7 @@ function display_main_menu {
     echo "                                         "
     echo "1. 安装 Docker"
     echo "2. ElmTool 选项"
+    echo "3. 实用工具"
     echo "0. 退出"
 }
 
@@ -21,6 +22,28 @@ function display_elmtool_menu {
     echo "0. 返回"
 }
 
+function display_utility_menu {
+    clear
+    echo "实用工具"
+    echo "1. 系统更新"
+    echo "2. 流媒体检测"
+    echo "3. x-ui 一键搭建"
+    echo "0. 返回"
+}
+
+function system_update {
+    clear
+    if [ "$(uname)" == "Darwin" ]; then
+        echo "暂不支持 MacOS。"
+    elif [ -f "/etc/redhat-release" ]; then
+        yum -y update
+    elif [ -f "/etc/lsb-release" ]; then
+        apt update -y
+    else
+        echo "无法确定您的操作系统类型！"
+    fi
+}
+
 while :; do
     display_main_menu
     read -p "请选择你要执行的操作: " choice
@@ -29,7 +52,7 @@ while :; do
         1)
             clear
             echo "正在安装 Docker...💬"
-            # Place Docker installation commands here
+            # Docker installation commands here
             echo "Docker 安装完成 🚀"
             read -p "按任意键继续... " pause
             ;;
@@ -42,14 +65,14 @@ while :; do
                     1)
                         clear
                         echo "正在安装 ElmTool...💬"
-                        # Place ElmTool installation commands here
+                        # ElmTool installation commands here
                         echo "ElmTool 安装完成 🚀"
                         read -p "按任意键继续... " pause
                         ;;
                     2)
                         clear
                         echo "正在更新 ElmTool...💬"
-                        # Place ElmTool update commands here
+                        # ElmTool update commands here
                         echo "ElmTool 更新完成✅"
                         read -p "按任意键继续... " pause
                         ;;
@@ -59,6 +82,41 @@ while :; do
                     *)
                         clear
                         echo "❌无效选项 $elm_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
+            ;;
+        3)
+            while :; do
+                display_utility_menu
+                read -p "请选择实用工具的操作: " util_choice
+                
+                case $util_choice in
+                    1)
+                        system_update
+                        read -p "按任意键继续... " pause
+                        ;;
+                    2)
+                        clear
+                        echo "流媒体检测"
+                        # 流媒体检测命令
+                        bash <(curl -L -s check.unlock.media)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    3)
+                        clear
+                        echo "x-ui 一键搭建"
+                        # x-ui 一键搭建命令
+                        bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $util_choice"
                         read -p "按任意键继续... " pause
                         ;;
                 esac
