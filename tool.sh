@@ -106,7 +106,7 @@ case $choice in
                         # 确保目录存在
                         mkdir -p /etc/elmWeb
                         # 下载文件
-                        curl -o /etc/elmWeb/config.ini https://raw.githubusercontent.com/IceCokei/myScripts/main/BackUp/config.ini
+                        curl -o /etc/elmWeb/config.ini https://github.jd-vip.tk/https://raw.githubusercontent.com/IceCokei/myScripts/main/BackUp/config.ini
                         fi
             # 运行 Docker 命令
                         docker run -dit \
