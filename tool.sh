@@ -16,7 +16,8 @@ function display_main_menu {
     echo "1. 系统信息查询"
     echo "2. ElmTool 选项 > "
     echo "3. 实用工具 > "
-    echo "4. Docker 选项 > "
+    echo "4. Docker 管理 > "
+    echo "5. 系统 工具"
     echo "0. 退出"
 }
 
@@ -41,10 +42,18 @@ function display_utility_menu {
 
 function display_docker_menu {
     clear
-    echo "Docker 选项"
+    echo "Docker 管理"
     echo "1. 安装 Docker"
     # 在这里你可以添加更多的 Docker 相关的选项
     echo "0. 返回"
+}
+
+function display_system_menu {
+
+    clear
+    echo "1. 设置你的ROOT密码"
+    echo "0. 返回"
+
 }
 
 function system_update {
@@ -170,11 +179,6 @@ case $choice in
                         echo "❌无效选项 $util_choice"
                         read -p "按任意键继续... " pause
                         ;;
-                    *)
-                        clear
-                        echo "❌无效选项 $util_choice"
-                        read -p "按任意键继续... " pause
-                        ;;
                 esac
             done
             ;;
@@ -199,6 +203,45 @@ case $choice in
                     *)
                         clear
                         echo "❌无效选项 $docker_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
+            ;;
+        5)
+            while :; do
+                display_system_menu
+                read -p "设置你的ROOT密码: " system_choice
+
+                case $system_choice in
+                1)  # 设置你的ROOT密码
+                    clear
+                    echo "设置你的ROOT密码"
+                    passwd
+                    sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+                    sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+                    service sshd restart
+                    echo "ROOT登录设置完毕！"
+
+                    read -p "需要重启服务器吗？(Y/N): " choice
+                    case "$choice" in
+                    [Yy])
+                        reboot
+                        ;;
+                    [Nn])
+                        echo "已取消"
+                        ;;
+                    *)
+                        echo "无效的选择，请输入 Y 或 N。"
+                        ;;
+                    esac
+                    ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $system_choice"
                         read -p "按任意键继续... " pause
                         ;;
                 esac
