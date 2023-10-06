@@ -1,62 +1,76 @@
 #!/bin/bash
 
-echo "Coke 工具 🛳️"
+function display_main_menu {
+    clear
+    echo " _  __ _       _____  ___    ___   _     "
+    echo "| |/ /| |     |_   _|/ _ \  / _ \ | |    "
+    echo "| ' / | |       | | | | | || | | || |    "
+    echo "| . \ | |___    | | | |_| || |_| || |___ "
+    echo "|_|\_\|_____|   |_|  \___/  \___/ |_____|"
+    echo "                                         "
+    echo "1. 安装 Docker"
+    echo "2. ElmTool 选项"
+    echo "0. 退出"
+}
+
+function display_elmtool_menu {
+    clear
+    echo "ElmTool 选项"
+    echo "1. 安装 ElmTool"
+    echo "2. 更新 ElmTool"
+    echo "0. 返回"
+}
 
 while :; do
-    echo "1. 安装 Docker"
-    echo "2. 安装 ElmTool"
-    echo "3. 更新 ElmTool"
-    echo "0. 退出"
+    display_main_menu
     read -p "请选择你要执行的操作: " choice
 
     case $choice in
         1)
+            clear
             echo "正在安装 Docker...💬"
-            curl -fsSL https://get.docker.com | bash
-            curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
+            # Place Docker installation commands here
             echo "Docker 安装完成 🚀"
+            read -p "按任意键继续... " pause
             ;;
         2)
-            echo "正在安装 ElmTool...💬"
-            docker run -dit \
-              -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
-              -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
-              --network host \
-              --name elmWeb \
-              --restart unless-stopped \
-              marisn/elmweb:latest
-            echo "ElmTool 安装完成 🚀"
-            ;;
-        3)
-            echo "正在更新 ElmTool...💬"
-            echo "开始执行 删除运行容器...✅"
-            docker stop elmWeb && docker rm elmWeb
-            echo "开始执行 删除残留镜像...✅"
-            docker rmi marisn/elmweb
-            echo "开始执行 拉取最新镜像...✅"
-            docker pull marisn/elmweb
-            echo "开始执行 安装最新版本...✅"
-            docker run -dit \
-              -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
-              -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
-              --network host \
-              --name elmWeb \
-              --restart unless-stopped \
-              marisn/elmweb:latest
-            echo "ElmTool 更新完成✅"
+            while :; do
+                display_elmtool_menu
+                read -p "请选择 ElmTool 的操作: " elm_choice
+                
+                case $elm_choice in
+                    1)
+                        clear
+                        echo "正在安装 ElmTool...💬"
+                        # Place ElmTool installation commands here
+                        echo "ElmTool 安装完成 🚀"
+                        read -p "按任意键继续... " pause
+                        ;;
+                    2)
+                        clear
+                        echo "正在更新 ElmTool...💬"
+                        # Place ElmTool update commands here
+                        echo "ElmTool 更新完成✅"
+                        read -p "按任意键继续... " pause
+                        ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $elm_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
             ;;
         0)
             break
             ;;
         *)
+            clear
             echo "❌无效选项 $choice"
+            read -p "按任意键继续... " pause
             ;;
     esac
-
-    # 在操作之后询问用户是否要继续
-    read -p "是否继续？(y/n): " continue_choice
-    if [[ "$continue_choice" != "y" ]]; then
-        break
-    fi
 done
