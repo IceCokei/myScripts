@@ -2,22 +2,24 @@
 
 function display_main_menu {
     clear
-echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
-echo -e "\033[1;32m| |/ /| |     |_   _|/ _ \  / _ \ | |    \033[0m"
-echo -e "\033[1;33m| ' / | |       | | | | | || | | || |    \033[0m"
-echo -e "\033[1;34m| . \ | |___    | | | |_| || |_| || |___ \033[0m"
-echo -e "\033[1;35m|_|\_\|_____|   |_|  \___/  \___/ |_____| \033[0m"
-echo -e "\033[1;36m                                         \033[0m"
+    echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
+    echo -e "\033[1;32m| |/ /| |     |_   _|/ _ \  / _ \ | |    \033[0m"
+    echo -e "\033[1;33m| ' / | |       | | | | | || | | || |    \033[0m"
+    echo -e "\033[1;34m| . \ | |___    | | | |_| || |_| || |___ \033[0m"
+    echo -e "\033[1;35m|_|\_\|_____|   |_|  \___/  \___/ |_____| \033[0m"
+    echo -e "\033[1;36m                                         \033[0m"
 
-echo -e "\033[1;37mCokeTooL一键脚本工具 v1.0.1 （支持Ubuntu，Debian，Centos系统）\033[0m"
+    echo -e "\033[1;37mCokeTooL一键脚本工具 v1.0.1 （支持Ubuntu，Debian，Centos系统）\033[0m"
 
-echo "***********************"
+    echo "***********************"
     
-    echo "1. 安装 Docker"
+    echo "1. 系统信息查询"
     echo "2. ElmTool 选项 > "
     echo "3. 实用工具 > "
+    echo "4. Docker 选项 > "
     echo "0. 退出"
 }
+
 
 function display_elmtool_menu {
     clear
@@ -34,6 +36,14 @@ function display_utility_menu {
     echo "2. 流媒体检测"
     echo "3. 一键搭建X-ui"
     echo "4. 测速"
+    echo "0. 返回"
+}
+
+function display_docker_menu {
+    clear
+    echo "Docker 选项"
+    echo "1. 安装 Docker"
+    # 在这里你可以添加更多的 Docker 相关的选项
     echo "0. 返回"
 }
 
@@ -64,16 +74,14 @@ while :; do
     display_main_menu
     read -p "请选择你要执行的操作: " choice
 
-    case $choice in
+case $choice in
         1)
             clear
-            echo "正在安装 Docker...💬"
-            curl -fsSL https://get.docker.com | bash
-            curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-            echo "Docker 安装完成 🚀"
+            echo "开始检测系统⚡️"
+            # x-ui 一键搭建命令
+            curl -sSL https://raw.githubusercontent.com/IceCokei/myScripts/main/CPU/system.sh | bash
             read -p "按任意键继续... " pause
-            ;;
+                        ;;
         2)
             while :; do
                 display_elmtool_menu
@@ -160,6 +168,37 @@ while :; do
                     *)
                         clear
                         echo "❌无效选项 $util_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $util_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
+            ;;
+        4)
+            while :; do
+                display_docker_menu
+                read -p "请选择 Docker 的操作: " docker_choice
+                
+                case $docker_choice in
+                    1)
+                        clear
+                        echo "正在安装 Docker...💬"
+                        curl -fsSL https://get.docker.com | bash
+                        curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                        chmod +x /usr/local/bin/docker-compose
+                        echo "Docker 安装完成 🚀"
+                        read -p "按任意键继续... " pause
+                        ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $docker_choice"
                         read -p "按任意键继续... " pause
                         ;;
                 esac
