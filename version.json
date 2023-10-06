@@ -1,4 +1,4 @@
 {
     "version": "v1.0.1",
-    "message": "This is your custom message from JSON"
+    "message": "1.0.1版本更新内容\n1.迁移修改Docker管理为其他一级目录\n2.增加系统信息查询\n3.ElmTool 工具优化逻辑(方便狗尼酱偷懒)"
 }
