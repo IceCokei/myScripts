@@ -6,16 +6,15 @@ function display_main_menu {
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
-        echo "Error: Unable to fetch version data"
+        echo "❌"
         exit 1
     fi
     
-    # 从JSON数据中解析version和message
-    VERSION=$(echo $JSON_DATA | jq -r '.version')
-
-    # 检查jq命令是否成功执行
+    VERSION=$(echo $JSON_DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['version'])")
+    
+    # 检查Python命令是否成功执行
     if [ $? -ne 0 ]; then
-        echo "Error: Unable to parse version data"
+        echo "❌: 无法解析版本数据"
         exit 1
     fi
     
