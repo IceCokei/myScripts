@@ -2,7 +2,7 @@
 
 function display_main_menu {
     # 获取version.json
-    JSON_DATA=$(curl -ks https://raw.githubusercontent.com/IceCokei/myScripts/main/version.json)
+    JSON_DATA=$(curl -ks https://github.jd-vip.tk/https://raw.githubusercontent.com/IceCokei/myScripts/main/version.json)
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
@@ -286,7 +286,6 @@ case $choice in
         00)
             clear
             echo -e "$MESSAGE"  
-            echo "***********************"
             read -p "按任意键返回主菜单... " pause
             ;;
         0)
