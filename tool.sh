@@ -15,8 +15,6 @@ function display_main_menu {
 
     echo -e "\033[1;37mCokeTooL一键脚本工具 $VERSION （支持Ubuntu，Debian，Centos系统）\033[0m"
     
-}
-
     echo "***********************"
     
     echo "1. 系统信息查询"
