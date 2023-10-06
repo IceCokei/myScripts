@@ -11,7 +11,7 @@ echo -e "\033[1;36m                                         \033[0m"
 
 echo -e "\033[1;37mCokeTooL一键脚本工具 v1.0.1 （支持Ubuntu，Debian，Centos系统）\033[0m"
 
-echo ""
+echo "***********************"
     
     echo "1. 安装 Docker"
     echo "2. ElmTool 选项 > "
