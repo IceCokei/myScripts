@@ -6,7 +6,6 @@ function display_main_menu {
     
     # 从JSON数据中解析version和message
     VERSION=$(echo $JSON_DATA | jq -r '.version')
-    MESSAGE=$(echo $JSON_DATA | jq -r '.message')
     
     clear
     echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
