@@ -12,7 +12,6 @@ function display_main_menu {
     echo "2. ElmTool 选项 > "
     echo "3. 实用工具 > "
     echo "0. 退出"
-    clear
 }
 
 function display_elmtool_menu {
