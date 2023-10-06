@@ -1,9 +1,12 @@
 #!/bin/bash
 
 function display_main_menu {
-    # 从 version.json 读取
-    VERSION=$(jq -r '.version' version.json)
-    MESSAGE=$(jq -r '.message' version.json)
+    # 从远程URL获取version.json
+    JSON_DATA=$(curl -s https://github.jd-vip.tk/https://raw.githubusercontent.com/IceCokei/myScripts/main/version.json)
+    
+    # 从JSON数据中解析version和message
+    VERSION=$(echo $JSON_DATA | jq -r '.version')
+    MESSAGE=$(echo $JSON_DATA | jq -r '.message')
     
     clear
     echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
@@ -22,6 +25,7 @@ function display_main_menu {
     echo "3. 实用工具 > "
     echo "4. Docker 管理 > "
     echo "5. 系统工具 > "
+    echo "00. 显示信息"
     echo "0. 退出"
 }
 
