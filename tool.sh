@@ -100,13 +100,22 @@ case $choice in
                     1)
                         clear
                         echo "正在安装 ElmTool...💬"
+            # 检查 /etc/elmWeb/config.ini 文件是否存在
+                        if [ ! -f "/etc/elmWeb/config.ini" ]; then
+                        echo "config.ini 文件不存在，正在下载..."
+                        # 确保目录存在
+                        mkdir -p /etc/elmWeb
+                        # 下载文件
+                        curl -o /etc/elmWeb/config.ini https://raw.githubusercontent.com/IceCokei/myScripts/main/BackUp/config.ini
+                        fi
+            # 运行 Docker 命令
                         docker run -dit \
-                          -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
-                          -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
-                          --network host \
-                          --name elmWeb \
-                          --restart unless-stopped \
-                          marisn/elmweb:latest
+                        -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
+                        -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
+                        --network host \
+                        --name elmWeb \
+                        --restart unless-stopped \
+                        marisn/elmweb:latest
                         echo "ElmTool 安装完成 🚀"
                         read -p "按任意键继续... " pause
                         ;;
