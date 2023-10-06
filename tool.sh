@@ -31,11 +31,11 @@ function display_main_menu {
     echo "***********************"
     
     echo "1. 系统信息查询"
-    echo "2. ElmTool 选项 > "
+    echo "2. ElmTool 工具 > "
     echo "3. 实用工具 > "
     echo "4. Docker 管理 > "
     echo "5. 系统工具 > "
-    echo "00. 显示信息"
+    echo "00. 版本日志"
     echo "0. 退出"
 }
 
