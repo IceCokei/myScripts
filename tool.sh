@@ -1,11 +1,23 @@
 #!/bin/bash
 
 function display_main_menu {
-    # 从远程URL获取version.json
-    JSON_DATA=$(curl -s https://github.jd-vip.tk/https://raw.githubusercontent.com/IceCokei/myScripts/main/version.json)
+    # 获取version.json
+    JSON_DATA=$(curl -ks https://raw.githubusercontent.com/IceCokei/myScripts/main/version.json)
+    
+    # 检查curl命令是否成功执行
+    if [ $? -ne 0 ]; then
+        echo "Error: Unable to fetch version data"
+        exit 1
+    fi
     
     # 从JSON数据中解析version和message
     VERSION=$(echo $JSON_DATA | jq -r '.version')
+
+    # 检查jq命令是否成功执行
+    if [ $? -ne 0 ]; then
+        echo "Error: Unable to parse version data"
+        exit 1
+    fi
     
     clear
     echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
@@ -27,7 +39,6 @@ function display_main_menu {
     echo "00. 显示信息"
     echo "0. 退出"
 }
-
 
 function display_elmtool_menu {
     clear
