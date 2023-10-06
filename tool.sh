@@ -33,6 +33,29 @@ function display_utility_menu {
     echo "0. 返回"
 }
 
+# 定义日志和确认函数
+LOGD() {
+    echo "[DEBUG] $1"
+}
+
+LOGI() {
+    echo "[INFO]  $1"
+}
+
+LOGE() {
+    echo "[ERROR] $1"
+}
+
+confirm() {
+    read -p "$1 " response
+    [[ "$response" =~ ^(yes|y|Y)$ ]]
+    return $?
+}
+
+show_menu() {
+    display_utility_menu
+}
+
 
 function system_update {
     clear
@@ -121,7 +144,6 @@ ssl_cert_issue() {
         show_menu
     fi
 }
-
 
 while :; do
     display_main_menu
