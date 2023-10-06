@@ -36,10 +36,20 @@ function system_update {
     clear
     if [ "$(uname)" == "Darwin" ]; then
         echo "暂不支持 MacOS。"
-    elif [ -f "/etc/redhat-release" ]; then
-        yum -y update
-    elif [ -f "/etc/lsb-release" ]; then
-        apt update -y
+    elif [ -f "/etc/os-release" ]; then
+        # 获取Linux发行版的ID
+        OS_ID=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+        case $OS_ID in
+            ubuntu|debian)
+                apt update -y
+                ;;
+            centos|rhel|fedora)
+                yum -y update
+                ;;
+            *)
+                echo "不支持的Linux发行版: $OS_ID"
+                ;;
+        esac
     else
         echo "无法确定您的操作系统类型！"
     fi
