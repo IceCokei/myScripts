@@ -17,7 +17,7 @@ function display_main_menu {
     echo "2. ElmTool 选项 > "
     echo "3. 实用工具 > "
     echo "4. Docker 管理 > "
-    echo "5. 系统 工具"
+    echo "5. 系统工具 > "
     echo "0. 退出"
 }
 
