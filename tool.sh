@@ -417,26 +417,37 @@ case $choice in
                     read -p "按任意键继续... " pause
                 fi
                 ;;
-                    00)
-                        clear
-                        echo -e "$MESSAGE"  
-                        read -p "按任意键返回主菜单... " pause
-                        break  # 跳出子循环返回主菜单
-                        ;; 
-                    *)
-                        clear
-                        echo "❌无效选项 $sub_choice"
-                        read -p "按任意键继续... " pause
-                        ;;
+        0)
+            break
+            ;;
+        *)
+            clear
+            echo "❌无效选项 $choice"
+            read -p "按任意键继续... " pause
+            ;;
                 esac
             done
+            ;;
+        00)
+            clear
+            echo -e "$MESSAGE"  
+            read -p "按任意键返回主菜单... " pause
             ;;
         0)
             break
             ;;
         *)
             clear
-            echo "❌无效选项 $panel_choice"
+            echo "❌无效选项 $choice"
+            read -p "按任意键继续... " pause
+            ;;
+            
+        0)
+            break
+            ;;
+        *)
+            clear
+            echo "❌无效选项 $choice"
             read -p "按任意键继续... " pause
             ;;
     esac
