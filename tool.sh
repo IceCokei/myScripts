@@ -424,47 +424,48 @@ case $choice in
                 esac
             done
             ;;
-            2)
-                clear
-                # 检测是否安装了Docker
-                if ! command -v docker &>/dev/null; then
+    case $panel_choice in
+        2)
+            clear
+            # 检测是否安装了Docker
+            if ! command -v docker &>/dev/null; then
                 curl -fsSL https://get.docker.com | sh  
                 systemctl start docker
                 systemctl enable docker
-                else
+            else
                 echo "Docker 已经安装，正在部署容器……"
-                    fi
+            fi
 
-                # 用户输入自定义的端口
-                read -p "请输入您想要的青龙面板端口: " ql_port
+            # 用户输入自定义的端口
+            read -p "请输入您想要的青龙面板端口: " ql_port
 
-                # 检查用户输入的是否是一个有效的端口号
-                if [[ "$ql_port" =~ ^[0-9]+$ ]] && [ "$ql_port" -ge 1024 ] && [ "$ql_port" -le 65535 ]; then
-        
+            # 检查用户输入的是否是一个有效的端口号
+            if [[ "$ql_port" =~ ^[0-9]+$ ]] && [ "$ql_port" -ge 1024 ] && [ "$ql_port" -le 65535 ]; then
+    
                 # 检查是否有重复的容器名，如果有，在名称后面加1
                 base_name="qinglong"
                 name_to_use="$base_name"
                 count=0
-
+    
                 while docker ps -a --format '{{.Names}}' | grep -wq $name_to_use; do
-                count=$((count + 1))
-                name_to_use="${base_name}${count}"
+                    count=$((count + 1))
+                    name_to_use="${base_name}${count}"
                 done
-
+    
                 # 创建文件夹
                 mkdir -p "/root/$name_to_use/data"
-
+    
                 # 运行 Docker 命令来部署青龙 latest 版本
                 docker run -dit \
-                -v /root/$name_to_use/data:/ql/data \
-                -p $ql_port:5700 \
-                -e QlBaseUrl="/" \
-                -e QlPort="5700" \
-                --name $name_to_use \
-                --hostname $name_to_use \
-                --restart unless-stopped \
-                whyour/qinglong:latest
-
+                    -v /root/$name_to_use/data:/ql/data \
+                    -p $ql_port:5700 \
+                    -e QlBaseUrl="/" \
+                    -e QlPort="5700" \
+                    --name $name_to_use \
+                    --hostname $name_to_use \
+                    --restart unless-stopped \
+                    whyour/qinglong:latest
+    
                 echo "$name_to_use 版本安装完成 🚀"
                 external_ip=$(curl -s ipv4.ip.sb)
                 # 获取以 192 开头的内网 IP 地址
@@ -474,31 +475,17 @@ case $choice in
                 echo "内网地址: http://$internal_ip:$ql_port"
                 echo ""
                 read -p "按任意键继续... " pause
-                else
+            else
                 echo "无效的端口号。请确保您输入一个在1024到65535之间的数字。"
                 read -p "按任意键继续... " pause
-                fi
-                    ;;
-        00)
-            clear
-            echo -e "$MESSAGE"  
-            read -p "按任意键返回主菜单... " pause
-            ;; 
+            fi
+            ;;
         0)
             break
             ;;
         *)
             clear
-            echo "❌无效选项 $choice"
-            read -p "按任意键继续... " pause
-            ;;
-
-        0)
-            break
-            ;;
-        *)
-            clear
-            echo "❌无效选项 $choice"
+            echo "❌无效选项 $panel_choice"
             read -p "按任意键继续... " pause
             ;;
     esac
