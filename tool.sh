@@ -355,12 +355,12 @@ case $choice in
         ./tcpx.sh
         ;;
 
-8)
-    while :; do
-        display_panel_menu
-        read -p "请选择你的的操作: " panel_choice
+        8)
+            while :; do
+                display_panel_menu
+                read -p "请选择你的的操作: " panel_choice
 
-        case $panel_choice in
+                case $panel_choice in
             1)
                 clear
                 # 检测是否安装了Docker
@@ -371,13 +371,11 @@ case $choice in
                 else
                     echo "Docker 已经安装，正在部署容器……"
                 fi
-
                 # 用户输入自定义的端口
                 read -p "请输入您想要的青龙面板端口: " ql_port
-
                 # 检查用户输入的是否是一个有效的端口号
                 if [[ "$ql_port" =~ ^[0-9]+$ ]] && [ "$ql_port" -ge 1024 ] && [ "$ql_port" -le 65535 ]; then
-                    # 运行 Docker 命令来部署青龙2.10.12
+                # 运行 Docker 命令来部署青龙2.10.12
                     docker run -dit \
                         -v /root/ql/config:/ql/config \
                         -v /root/ql/log:/ql/log \
@@ -387,13 +385,10 @@ case $choice in
                         --name qinglong \
                         --restart always \
                         whyour/qinglong:2.10.12
-
                     echo "青龙2.10.12版本安装完成 🚀"
                     external_ip=$(curl -s ipv4.ip.sb)
-                    internal_ip=$(hostname -I | awk '{print $1}')
                     echo "您可以使用以下地址访问青龙面板:"
-                    echo "外网地址: http://$external_ip:$ql_port"
-                    echo "内网地址: http://$internal_ip:$ql_port"
+                    echo "http://$external_ip:$ql_port"
                     echo ""
                     read -p "按任意键继续... " pause
                 else
@@ -401,11 +396,14 @@ case $choice in
                     read -p "按任意键继续... " pause
                 fi
                 ;;
-            *)
-                clear
-                echo "❌无效选项 $panel_choice"
-                read -p "按任意键继续... " pause
-                ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $system_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
                 esac
             done
             ;;
