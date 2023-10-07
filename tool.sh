@@ -365,30 +365,37 @@ case $choice in
                 clear
                 # 检测是否安装了Docker
                 if ! command -v docker &>/dev/null; then
-                    curl -fsSL https://get.docker.com | sh  # 修改这里
+                    curl -fsSL https://get.docker.com | sh  
                     systemctl start docker
                     systemctl enable docker
                 else
                     echo "Docker 已经安装，正在部署容器……"
                 fi
+                # 用户输入自定义的端口
+                read -p "请输入您想要的青龙面板端口: " ql_port
+                # 检查用户输入的是否是一个有效的端口号
+                if [[ "$ql_port" =~ ^[0-9]+$ ]] && [ "$ql_port" -ge 1024 ] && [ "$ql_port" -le 65535 ]; then
                 # 运行 Docker 命令来部署青龙2.10.12
-                docker run -dit \
-                    -v /root/ql/config:/ql/config \
-                    -v /root/ql/log:/ql/log \
-                    -v /root/ql/db:/ql/db \
-                    -v /root/ql/scripts:/ql/scripts \
-                    -p 5705:5700 \
-                    --name qinglong \
-                    --restart always \
-                    whyour/qinglong:2.10.12
-                echo "青龙2.10.12版本安装完成 🚀"
-                external_ip=$(curl -s ipv4.ip.sb)
-                echo "您可以使用以下地址访问青龙面板:"
-                echo "http://$external_ip:5700"
-                echo ""
-                read -p "按任意键继续... " pause
+                    docker run -dit \
+                        -v /root/ql/config:/ql/config \
+                        -v /root/ql/log:/ql/log \
+                        -v /root/ql/db:/ql/db \
+                        -v /root/ql/scripts:/ql/scripts \
+                        -p $ql_port:5700 \
+                        --name qinglong \
+                        --restart always \
+                        whyour/qinglong:2.10.12
+                    echo "青龙2.10.12版本安装完成 🚀"
+                    external_ip=$(curl -s ipv4.ip.sb)
+                    echo "您可以使用以下地址访问青龙面板:"
+                    echo "http://$external_ip:$ql_port"
+                    echo ""
+                    read -p "按任意键继续... " pause
+                else
+                    echo "无效的端口号。请确保您输入一个在1024到65535之间的数字。"
+                    read -p "按任意键继续... " pause
+                fi
                 ;;
-                
                     0)
                         break
                         ;;
