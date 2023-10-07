@@ -215,6 +215,7 @@ case $choice in
                                 echo "Docker网络列表"
                                 docker network ls
                             } | less
+                            read -p "按任意键继续... " pause
                             ;;
                     0)
                         break
