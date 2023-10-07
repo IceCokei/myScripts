@@ -249,7 +249,7 @@ case $choice in
         5)
             while :; do
                 display_system_menu
-                read -p "设置你的ROOT密码: " system_choice
+                read -p "请选择你的的操作:: " system_choice
 
                 case $system_choice in
                 1)  # 设置你的ROOT密码
