@@ -86,11 +86,12 @@ function display_panel_menu {
     clear
     echo "青龙面板管理"
     echo "1. 安装青龙 2.10.12版本"
-    echo "2. 安装青龙 latest 版本"
-    echo "3. 卸载青龙"
-    echo "4. 查看青龙面板"
+    # echo "2. 安装青龙 latest 版本"
+    # echo "3. 卸载青龙"
+    # echo "4. 查看青龙面板"
     echo "0. 返回上一级"
 }
+
 
 function system_update {
     clear
@@ -423,62 +424,6 @@ case $choice in
                         ;;
                 esac
             done
-            ;;
-    case $panel_choice in
-        2)
-            clear
-            # 检测是否安装了Docker
-            if ! command -v docker &>/dev/null; then
-                curl -fsSL https://get.docker.com | sh  
-                systemctl start docker
-                systemctl enable docker
-            else
-                echo "Docker 已经安装，正在部署容器……"
-            fi
-
-            # 用户输入自定义的端口
-            read -p "请输入您想要的青龙面板端口: " ql_port
-
-            # 检查用户输入的是否是一个有效的端口号
-            if [[ "$ql_port" =~ ^[0-9]+$ ]] && [ "$ql_port" -ge 1024 ] && [ "$ql_port" -le 65535 ]; then
-    
-                # 检查是否有重复的容器名，如果有，在名称后面加1
-                base_name="qinglong"
-                name_to_use="$base_name"
-                count=0
-    
-                while docker ps -a --format '{{.Names}}' | grep -wq $name_to_use; do
-                    count=$((count + 1))
-                    name_to_use="${base_name}${count}"
-                done
-    
-                # 创建文件夹
-                mkdir -p "/root/$name_to_use/data"
-    
-                # 运行 Docker 命令来部署青龙 latest 版本
-                docker run -dit \
-                    -v /root/$name_to_use/data:/ql/data \
-                    -p $ql_port:5700 \
-                    -e QlBaseUrl="/" \
-                    -e QlPort="5700" \
-                    --name $name_to_use \
-                    --hostname $name_to_use \
-                    --restart unless-stopped \
-                    whyour/qinglong:latest
-    
-                echo "$name_to_use 版本安装完成 🚀"
-                external_ip=$(curl -s ipv4.ip.sb)
-                # 获取以 192 开头的内网 IP 地址
-                internal_ip=$(hostname -I | awk '{for(i=1;i<=NF;i++) if ($i ~ /^192/) print $i}')
-                echo "您可以使用以下地址访问青龙面板:"
-                echo "外网地址: http://$external_ip:$ql_port"
-                echo "内网地址: http://$internal_ip:$ql_port"
-                echo ""
-                read -p "按任意键继续... " pause
-            else
-                echo "无效的端口号。请确保您输入一个在1024到65535之间的数字。"
-                read -p "按任意键继续... " pause
-            fi
             ;;
         0)
             break
