@@ -214,7 +214,7 @@ case $choice in
                                 echo ""
                                 echo "Docker网络列表"
                                 docker network ls
-                                echo "Docker 输出完毕 退出请按'q' 🚀"
+                                echo -e "\nDocker 输出完毕 退出请按'q' 🚀"
                             } | less
                             ;;
                     0)
