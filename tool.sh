@@ -214,6 +214,7 @@ case $choice in
                         echo "Dcoker网络列表"
                         docker network ls
                         echo ""
+                        read -p "按任意键继续... " pause
                         ;;
                     0)
                         break
