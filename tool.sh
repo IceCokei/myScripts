@@ -39,6 +39,7 @@ function display_main_menu {
     echo "5. 系统工具 > "
     echo "6. WARP 管理 ▶ 解锁🔓ChatGPT / Netfilx "
     echo "7. BBR加速管理 >"
+    echo "8. 常用面板安装 >"
     echo "0. 退出"
     echo "***********************"
     echo "00. 版本日志"
@@ -81,6 +82,16 @@ function display_system_menu {
 
 }
 
+function display_panel_menu {
+    clear
+    echo "青龙面板管理"
+    echo "1. 安装青龙 2.10.12版本"
+    echo "2. 安装青龙 latest 版本"
+    echo "3. 卸载青龙"
+    echo "4. 查看青龙面板"
+    echo "0. 返回上一级"
+}
+
 function system_update {
     clear
     if [ "$(uname)" == "Darwin" ]; then
@@ -104,11 +115,6 @@ function system_update {
     fi
 }
 
-function display_message_menu {
-    clear
-    echo "0. 返回"
-
-}
 
 while :; do
     display_main_menu
@@ -348,6 +354,52 @@ case $choice in
         chmod +x tcpx.sh
         ./tcpx.sh
         ;;
+
+        8)
+            while :; do
+                display_panel_menu
+                read -p "请选择你的的操作: " panel_choice
+
+                case $panel_choice in
+            1)
+                clear
+                # 检测是否安装了Docker
+                if ! command -v docker &>/dev/null; then
+                    curl -fsSL https://get.docker.com | sh  # 修改这里
+                    systemctl start docker
+                    systemctl enable docker
+                else
+                    echo "Docker 已经安装，正在部署容器……"
+                fi
+                # 运行 Docker 命令来部署青龙2.10.12
+                docker run -dit \
+                    -v /root/ql/config:/ql/config \
+                    -v /root/ql/log:/ql/log \
+                    -v /root/ql/db:/ql/db \
+                    -v /root/ql/scripts:/ql/scripts \
+                    -p 5705:5700 \
+                    --name qinglong \
+                    --restart always \
+                    whyour/qinglong:2.10.12
+                echo "青龙2.10.12版本安装完成 🚀"
+                external_ip=$(curl -s ipv4.ip.sb)
+                echo "您可以使用以下地址访问青龙面板:"
+                echo "http://$external_ip:5700"
+                echo ""
+                read -p "按任意键继续... " pause
+                ;;
+                
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $system_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
+            ;;
         00)
             clear
             echo -e "$MESSAGE"  
