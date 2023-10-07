@@ -197,25 +197,25 @@ case $choice in
                         read -p "按任意键继续... " pause
                         ;;
                     2)
-                        clear
-                        echo "Dcoker版本"
-                        docker --version
-                        docker-compose --version
-                        echo ""
-                        echo "Dcoker镜像列表"
-                        docker image ls
-                        echo ""
-                        echo "Dcoker容器列表"
-                        docker ps -a
-                        echo ""
-                        echo "Dcoker卷列表"
-                        docker volume ls
-                        echo ""
-                        echo "Dcoker网络列表"
-                        docker network ls
-                        echo ""
-                        read -p "按任意键继续... " pause
-                        ;;
+                            clear
+                            {
+                                echo "Docker版本"
+                                docker --version
+                                docker-compose --version
+                                echo ""
+                                echo "Docker镜像列表"
+                                docker image ls
+                                echo ""
+                                echo "Docker容器列表"
+                                docker ps -a
+                                echo ""
+                                echo "Docker卷列表"
+                                docker volume ls
+                                echo ""
+                                echo "Docker网络列表"
+                                docker network ls
+                            } | less
+                            ;;
                     0)
                         break
                         ;;
