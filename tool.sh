@@ -404,7 +404,8 @@ case $choice in
 
                     echo "$name_to_use 版本安装完成 🚀"
                     external_ip=$(curl -s ipv4.ip.sb)
-                    internal_ip=$(hostname -I | awk '{print $1}')
+                    # 获取以 192 开头的内网 IP 地址
+                    internal_ip=$(hostname -I | awk '{for(i=1;i<=NF;i++) if ($i ~ /^192/) print $i}')
                     echo "您可以使用以下地址访问青龙面板:"
                     echo "外网地址: http://$external_ip:$ql_port"
                     echo "内网地址: http://$internal_ip:$ql_port"
