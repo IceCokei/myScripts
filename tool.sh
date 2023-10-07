@@ -286,7 +286,7 @@ case $choice in
         5)
             while :; do
                 display_system_menu
-                read -p "请选择你的的操作:: " system_choice
+                read -p "请选择你的的操作: " system_choice
 
                 case $system_choice in
                 1)  # 设置你的ROOT密码
@@ -356,12 +356,12 @@ case $choice in
         ./tcpx.sh
         ;;
 
-8)
-    while :; do
-        display_panel_menu
-        read -p "请选择你的的操作: " panel_choice
+        8)
+            while :; do
+            display_panel_menu
+            read -p "请选择你的的操作: " panel_choice
 
-        case $panel_choice in
+            case $panel_choice in
             1)
                 clear
                 # 检测是否安装了Docker
@@ -417,9 +417,15 @@ case $choice in
                     read -p "按任意键继续... " pause
                 fi
                 ;;
+                    00)
+                        clear
+                        echo -e "$MESSAGE"  
+                        read -p "按任意键返回主菜单... " pause
+                        break  # 跳出子循环返回主菜单
+                        ;; 
                     *)
                         clear
-                        echo "❌无效选项 $system_choice"
+                        echo "❌无效选项 $sub_choice"
                         read -p "按任意键继续... " pause
                         ;;
                 esac
