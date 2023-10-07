@@ -68,6 +68,7 @@ function display_docker_menu {
     clear
     echo "Docker 管理"
     echo "1. 安装 Docker"
+    echo "2. 查看Dcoker全局状态"
     # 在这里你可以添加更多的 Docker 相关的选项
     echo "0. 返回"
 }
@@ -194,6 +195,25 @@ case $choice in
                         chmod +x /usr/local/bin/docker-compose
                         echo "Docker 安装完成 🚀"
                         read -p "按任意键继续... " pause
+                        ;;
+                    2)
+                        clear
+                        echo "Dcoker版本"
+                        docker --version
+                        docker-compose --version
+                        echo ""
+                        echo "Dcoker镜像列表"
+                        docker image ls
+                        echo ""
+                        echo "Dcoker容器列表"
+                        docker ps -a
+                        echo ""
+                        echo "Dcoker卷列表"
+                        docker volume ls
+                        echo ""
+                        echo "Dcoker网络列表"
+                        docker network ls
+                        echo ""
                         ;;
                     0)
                         break
@@ -325,7 +345,6 @@ case $choice in
         wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh
         chmod +x tcpx.sh
         ./tcpx.sh
-        read -p "按任意键继续... " pause
         ;;
         00)
             clear
