@@ -285,30 +285,21 @@ case $choice in
             done
             ;;
         6)
-            clear
-            # 检查并安装 wget（如果需要）
-            if ! command -v wget &>/dev/null; then
-            if command -v apt &>/dev/null; then
+    clear
+    # 检查并安装 wget（如果需要）
+    if ! command -v wget &>/dev/null; then
+        if command -v apt &>/dev/null; then
             apt update -y && apt install -y wget
-            elif command -v yum &>/dev/null; then
+        elif command -v yum &>/dev/null; then
             yum -y update && yum -y install wget
-            else
+        else
             echo "未知的包管理器!"
             exit 1
-            fi
         fi
-            wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
-            ;;
-            read -p "按任意键继续... " pause
-                        ;;  
-                    0)
-                        break
-                        ;;
-                    *)
-                        clear
-                        echo "❌无效选项 $system_choice"
-                        read -p "按任意键继续... " pause
-                        ;;   
+    fi
+    wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
+    read -p "按任意键继续... " pause
+    ;;
         00)
             clear
             echo -e "$MESSAGE"  
