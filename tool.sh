@@ -33,21 +33,22 @@ function display_main_menu {
     echo "***********************"
     
     echo "1. 系统信息查询"
-    echo "2. ElmTool 选项 > "
-    echo "3. 实用工具 > "
-    echo "4. Docker 管理 > "
+    echo "2. ElmWeb 管理 > "
+    echo "3. Docker 管理 > "
+    echo "4. 实用工具 > "
     echo "5. 系统工具 > "
+    echo "6. WARP 管理 > 解锁🔓ChatGPT / Netfilx "
     echo "0. 退出"
     echo "***********************"
     echo "00. 版本日志"
     
 }
 
-function display_elmtool_menu {
+function display_ElmWeb_menu {
     clear
-    echo "ElmTool 选项"
-    echo "1. 安装 ElmTool"
-    echo "2. 更新 ElmTool"
+    echo "ElmWeb 选项"
+    echo "1. 安装 ElmWeb"
+    echo "2. 更新 ElmWeb"
     echo "0. 返回"
 }
 
@@ -120,13 +121,13 @@ case $choice in
                         ;;
         2)
             while :; do
-                display_elmtool_menu
-                read -p "请选择 ElmTool 的操作: " elm_choice
+                display_ElmWeb_menu
+                read -p "请选择 ElmWeb 的操作: " elm_choice
                 
                 case $elm_choice in
                     1)
                         clear
-                        echo "正在安装 ElmTool...💬"
+                        echo "正在安装 ElmWeb...💬"
             # 检查 /etc/elmWeb/config.ini 文件是否存在
                         if [ ! -f "/etc/elmWeb/config.ini" ]; then
                         echo "config.ini 文件不存在，正在下载..."
@@ -143,12 +144,12 @@ case $choice in
                         --name elmWeb \
                         --restart unless-stopped \
                         marisn/elmweb:latest
-                        echo "ElmTool 安装完成 🚀"
+                        echo "ElmWeb 安装完成 🚀"
                         read -p "按任意键继续... " pause
                         ;;
                     2)
                         clear
-                        echo "正在更新 ElmTool...💬"
+                        echo "正在更新 ElmWeb...💬"
                         echo "开始执行 删除运行容器...✅"
                         docker stop elmWeb && docker rm elmWeb
                         echo "开始执行 删除依赖镜像...✅"
@@ -163,7 +164,7 @@ case $choice in
                           --name elmWeb \
                           --restart unless-stopped \
                           marisn/elmweb:latest
-                        echo "ElmTool 更新完成✅"
+                        echo "ElmWeb 更新完成✅"
                         read -p "按任意键继续... " pause
                         ;;
                     0)
@@ -178,6 +179,32 @@ case $choice in
             done
             ;;
         3)
+            while :; do
+                display_docker_menu
+                read -p "请选择 Docker 的操作: " docker_choice
+                
+                case $docker_choice in
+                    1)
+                        clear
+                        echo "正在安装 Docker...💬"
+                        curl -fsSL https://get.docker.com | bash
+                        curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                        chmod +x /usr/local/bin/docker-compose
+                        echo "Docker 安装完成 🚀"
+                        read -p "按任意键继续... " pause
+                        ;;
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $docker_choice"
+                        read -p "按任意键继续... " pause
+                        ;;
+                esac
+            done
+            ;;
+        4)
             while :; do
                 display_utility_menu
                 read -p "请选择实用工具的操作: " util_choice
@@ -213,32 +240,6 @@ case $choice in
                     *)
                         clear
                         echo "❌无效选项 $util_choice"
-                        read -p "按任意键继续... " pause
-                        ;;
-                esac
-            done
-            ;;
-        4)
-            while :; do
-                display_docker_menu
-                read -p "请选择 Docker 的操作: " docker_choice
-                
-                case $docker_choice in
-                    1)
-                        clear
-                        echo "正在安装 Docker...💬"
-                        curl -fsSL https://get.docker.com | bash
-                        curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                        chmod +x /usr/local/bin/docker-compose
-                        echo "Docker 安装完成 🚀"
-                        read -p "按任意键继续... " pause
-                        ;;
-                    0)
-                        break
-                        ;;
-                    *)
-                        clear
-                        echo "❌无效选项 $docker_choice"
                         read -p "按任意键继续... " pause
                         ;;
                 esac
@@ -283,6 +284,31 @@ case $choice in
                 esac
             done
             ;;
+        6)
+            clear
+            # 检查并安装 wget（如果需要）
+            if ! command -v wget &>/dev/null; then
+            if command -v apt &>/dev/null; then
+            apt update -y && apt install -y wget
+            elif command -v yum &>/dev/null; then
+            yum -y update && yum -y install wget
+            else
+            echo "未知的包管理器!"
+            exit 1
+            fi
+        fi
+            wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
+            ;;
+            read -p "按任意键继续... " pause
+                        ;;  
+                    0)
+                        break
+                        ;;
+                    *)
+                        clear
+                        echo "❌无效选项 $system_choice"
+                        read -p "按任意键继续... " pause
+                        ;;   
         00)
             clear
             echo -e "$MESSAGE"  
