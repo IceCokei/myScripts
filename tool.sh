@@ -37,7 +37,8 @@ function display_main_menu {
     echo "3. Docker 管理 > "
     echo "4. 实用工具 > "
     echo "5. 系统工具 > "
-    echo "6. WARP 管理 > 解锁🔓ChatGPT / Netfilx "
+    echo "6. WARP 管理 ▶ 解锁🔓ChatGPT / Netfilx "
+    echo "7. BBR加速管理 >"
     echo "0. 退出"
     echo "***********************"
     echo "00. 版本日志"
@@ -300,11 +301,11 @@ case $choice in
         wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
         read -p "按任意键继续... " pause
         ;;
-            00)
-                clear
-                echo -e "$MESSAGE"  
-                read -p "按任意键返回主菜单... " pause
-                ;;
+        00)
+            clear
+            echo -e "$MESSAGE"  
+            read -p "按任意键返回主菜单... " pause
+            ;; 
         0)
             break
             ;;
@@ -313,7 +314,7 @@ case $choice in
             echo "❌无效选项 $choice"
             read -p "按任意键继续... " pause
             ;;
-            
+
         0)
             break
             ;;
