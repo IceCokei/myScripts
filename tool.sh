@@ -58,8 +58,9 @@ function display_utility_menu {
     echo "实用工具"
     echo "1. 系统更新"
     echo "2. 流媒体检测"
-    echo "3. 一键搭建X-ui"
-    echo "4. 测速"
+    echo "3. ChatGPT解锁检测"
+    echo "4. 一键搭建X-ui"
+    echo "5. 网络测速"
     echo "0. 返回"
 }
 
@@ -224,12 +225,19 @@ case $choice in
                         ;;
                     3)
                         clear
+                        echo "ChatGPT解锁检测"
+                        # ChatGPT解锁检测
+                        bash <(curl -Ls https://cdn.jsdelivr.net/gh/missuo/OpenAI-Checker/openai.sh)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    4)
+                        clear
                         echo "x-ui 一键搭建"
                         # x-ui 一键搭建命令
                         bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
                         read -p "按任意键继续... " pause
                         ;;
-                    4)
+                    5)
                         clear
                         echo "测速"
                         curl -Lso- bench.sh | bash
@@ -299,6 +307,24 @@ case $choice in
                 fi
             fi
         wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
+        read -p "按任意键继续... " pause
+        ;;
+        7)
+        clear
+        # 检查并安装 wget（如果需要）
+            if ! command -v wget &>/dev/null; then
+                if command -v apt &>/dev/null; then
+                apt update -y && apt install -y wget
+            elif command -v yum &>/dev/null; then
+                yum -y update && yum -y install wget
+            else
+                echo "未知的包管理器!"
+                exit 1
+                fi
+            fi
+        wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh
+        chmod +x tcpx.sh
+        ./tcpx.sh
         read -p "按任意键继续... " pause
         ;;
         00)
