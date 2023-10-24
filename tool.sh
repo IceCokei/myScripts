@@ -18,13 +18,13 @@ function check_install_python {
 }
 
 function display_main_menu {
-    check_install_python
     # 获取version.json
     JSON_DATA=$(curl -ks https://tool.keleio.cn/myScripts/version.json)
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
         echo "❌: 无法解析版本数据"
+        check_install_python
         exit 1
     fi
     
@@ -34,6 +34,7 @@ function display_main_menu {
     # 检查Python命令是否成功执行
     if [ $? -ne 0 ]; then
         echo "❌: 无法解析版本数据"
+        check_install_python
         exit 1
     fi
     
