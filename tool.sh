@@ -40,7 +40,7 @@ function display_main_menu {
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
-        echo "❌: 无法解析版本数据"
+        echo "❌: 无法解析版本数据,请检查是否安装python？"
         exit 1
     fi
     
@@ -49,7 +49,7 @@ function display_main_menu {
     
     # 检查jq命令是否成功执行
     if [ $? -ne 0 ]; then
-        echo "❌: 无法解析版本数据"
+        echo "❌: 无法解析版本数据,请检查是否安装python？"
         exit 1
     fi
     
