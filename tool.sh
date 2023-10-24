@@ -1,22 +1,40 @@
 #!/bin/bash
 
-function check_install {
-    local package=$1
-    local install_cmd=$2
-    if ! command -v $package &> /dev/null; then
-        echo "$package is not installed. Installing now..."
-        eval $install_cmd
+function check_install_python {
+    # Check if Python is installed
+    if ! command -v python3 &> /dev/null; then
+        echo "Python is not installed. Installing now..."
+        
+        # Attempt to install Python
+        if command -v apt-get &> /dev/null; then
+            apt-get update && apt-get install -y python3
+        elif command -v yum &> /dev/null; then
+            yum -y install python3
+        else
+            echo "❌ 不受支持的包管理器。 无法安装Python！."
+            exit 1
+        fi
     fi
 }
 
-function install_prerequisites {
-    # 检查并安装 Python
-    check_install python3 "apt-get update && apt-get install -y python3 || yum -y install python3"
-    # 检查并安装 jq
-    check_install jq "apt-get update && apt-get install -y jq || yum -y install jq"
+
+function check_install_wget {
+    if ! command -v wget &> /dev/null; then
+        echo "Wget is not installed. Installing now..."
+        if command -v apt-get &> /dev/null; then
+            apt-get update && apt-get install -y wget
+        elif command -v yum &> /dev/null; then
+            yum -y install wget
+        else
+            echo "❌ Unsupported package manager. Cannot install Wget!"
+            exit 1
+        fi
+    fi
 }
 
 function display_main_menu {
+    check_install_python
+    check_install_wget
     # 获取version.json
     JSON_DATA=$(curl -ks https://tool.keleio.cn/myScripts/version.json)
     
