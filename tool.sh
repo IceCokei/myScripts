@@ -17,28 +17,44 @@ function check_install_python {
     fi
 }
 
+
+function check_install_wget {
+    if ! command -v wget &> /dev/null; then
+        echo "Wget is not installed. Installing now..."
+        if command -v apt-get &> /dev/null; then
+            apt-get update && apt-get install -y wget
+        elif command -v yum &> /dev/null; then
+            yum -y install wget
+        else
+            echo "❌ Unsupported package manager. Cannot install Wget!"
+            exit 1
+        fi
+    fi
+}
+
 function display_main_menu {
+    check_install_python
+    check_install_wget
     # 获取version.json
     JSON_DATA=$(curl -ks https://tool.keleio.cn/myScripts/version.json)
     
     # 检查curl命令是否成功执行
     if [ $? -ne 0 ]; then
         echo "❌: 无法解析版本数据"
-        check_install_python
         exit 1
     fi
     
-    VERSION=$(echo $JSON_DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['version'])")
-    MESSAGE=$(echo $JSON_DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['message'])")
+    VERSION=$(echo $JSON_DATA | jq -r '.version')
+    MESSAGE=$(echo $JSON_DATA | jq -r '.message')
     
-    # 检查Python命令是否成功执行
+    # 检查jq命令是否成功执行
     if [ $? -ne 0 ]; then
         echo "❌: 无法解析版本数据"
-        check_install_python
         exit 1
     fi
     
     clear
+    
     echo -e "\033[1;31m _  __ _       _____  ___    ___   _     \033[0m"
     echo -e "\033[1;32m| |/ /| |     |_   _|/ _ \  / _ \ | |    \033[0m"
     echo -e "\033[1;33m| ' / | |       | | | | | || | | || |    \033[0m"
