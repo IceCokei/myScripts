@@ -52,7 +52,8 @@ function display_utility_menu {
     echo "3. ChatGPT解锁检测"
     echo "4. 一键搭建X-ui"
     echo "5. 网络测速"
-    echo "6. 设置ROOT密码"
+    echo "6. IP质量体检"
+    echo "7. 设置ROOT密码"
     echo "0. 返回"
 }
 
@@ -219,6 +220,13 @@ case $choice in
                         read -p "按任意键继续... " pause
                         ;;
                     6)
+                        clear
+                        echo "IP质量体检"
+                        # IP质量体检命令
+                        bash <(curl -sL IP.Check.Place)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    7)
                         add_sshpasswd
                         read -p "按任意键继续... " pause
                         ;;
