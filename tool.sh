@@ -34,25 +34,14 @@ function display_main_menu {
     echo "***********************"
     
     echo "1. 系统信息查询"
-    echo "2. ElmWeb 管理 > "
-    echo "3. Docker 管理 > "
-    echo "4. 实用工具 > "
-    echo "5. 系统工具 > "
-    echo "6. WARP 管理 ▶ 解锁🔓ChatGPT / Netfilx "
-    echo "7. BBR加速管理 >"
-    echo "8. 常用面板安装 >"
+    echo "2. Docker 管理 > "
+    echo "3. 实用工具 > "
+    echo "4. WARP 管理 ▶ 解锁🔓ChatGPT / Netfilx "
+    echo "5. BBR加速管理 >"
+    echo "6. 常用面板安装 >"
     echo "0. 退出"
-    echo "***********************"
     echo "00. 版本日志"
     
-}
-
-function display_ElmWeb_menu {
-    clear
-    echo "ElmWeb 选项"
-    echo "1. 安装 ElmWeb"
-    echo "2. 更新 ElmWeb"
-    echo "0. 返回"
 }
 
 function display_utility_menu {
@@ -63,6 +52,7 @@ function display_utility_menu {
     echo "3. ChatGPT解锁检测"
     echo "4. 一键搭建X-ui"
     echo "5. 网络测速"
+    echo "6. 设置ROOT密码"
     echo "0. 返回"
 }
 
@@ -75,14 +65,6 @@ function display_docker_menu {
     echo "0. 返回"
 }
 
-function display_system_menu {
-
-    clear
-    echo "1. 设置你的ROOT密码"
-    echo "0. 返回"
-
-}
-
 function display_panel_menu {
     clear
     echo "青龙面板管理"
@@ -92,7 +74,6 @@ function display_panel_menu {
     # echo "4. 查看青龙面板"
     echo "0. 返回上一级"
 }
-
 
 function system_update {
     clear
@@ -117,6 +98,29 @@ function system_update {
     fi
 }
 
+# 设置ROOT密码登录模式
+add_sshpasswd() {
+    echo "设置你的ROOT密码"
+    passwd
+    sed -i 's/^\s*#\?\s*PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+    sed -i 's/^\s*#\?\s*PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    rm -rf /etc/ssh/sshd_config.d/* /etc/ssh/ssh_config.d/*
+    service sshd restart
+    echo "ROOT登录设置完毕！"
+
+    read -p "需要重启服务器吗？(Y/N): " choice
+    case "$choice" in
+    [Yy])
+        reboot
+        ;;
+    [Nn])
+        echo "已取消"
+        ;;
+    *)
+        echo "无效的选择，请输入 Y 或 N。"
+        ;;
+    esac
+}
 
 while :; do
     display_main_menu
@@ -129,67 +133,8 @@ case $choice in
             # x-ui 一键搭建命令
             curl -sSL https://raw.githubusercontent.com/IceCokei/myScripts/main/CPU/system.sh | bash
             read -p "按任意键继续... " pause
-                        ;;
-        2)
-            while :; do
-                display_ElmWeb_menu
-                read -p "请选择 ElmWeb 的操作: " elm_choice
-                
-                case $elm_choice in
-                    1)
-                        clear
-                        echo "正在安装 ElmWeb...💬"
-            # 检查 /etc/elmWeb/config.ini 文件是否存在
-                        if [ ! -f "/etc/elmWeb/config.ini" ]; then
-                        echo "config.ini 文件不存在，正在下载..."
-                        # 确保目录存在
-                        mkdir -p /etc/elmWeb
-                        # 下载文件
-                        curl -o /etc/elmWeb/config.ini https://github.jd-vip.tk/https://raw.githubusercontent.com/IceCokei/myScripts/main/BackUp/config.ini
-                        fi
-            # 运行 Docker 命令
-                        docker run -dit \
-                        -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
-                        -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
-                        --network host \
-                        --name elmWeb \
-                        --restart unless-stopped \
-                        marisn/elmweb:latest
-                        echo "ElmWeb 安装完成 🚀"
-                        read -p "按任意键继续... " pause
-                        ;;
-                    2)
-                        clear
-                        echo "正在更新 ElmWeb...💬"
-                        echo "开始执行 删除运行容器...✅"
-                        docker stop elmWeb && docker rm elmWeb
-                        echo "开始执行 删除依赖镜像...✅"
-                        docker rmi marisn/elmweb
-                        echo "开始执行 获取最新镜像...✅"
-                        docker pull marisn/elmweb
-                        echo "开始执行 执行安装镜像...✅"
-                        docker run -dit \
-                          -v /etc/elmWeb/config.ini:/etc/elmWeb/config.ini \
-                          -v /etc/elmWeb/database.db:/etc/elmWeb/database.db \
-                          --network host \
-                          --name elmWeb \
-                          --restart unless-stopped \
-                          marisn/elmweb:latest
-                        echo "ElmWeb 更新完成✅"
-                        read -p "按任意键继续... " pause
-                        ;;
-                    0)
-                        break
-                        ;;
-                    *)
-                        clear
-                        echo "❌无效选项 $elm_choice"
-                        read -p "按任意键继续... " pause
-                        ;;
-                esac
-            done
             ;;
-        3)
+        2)
             while :; do
                 display_docker_menu
                 read -p "请选择 Docker 的操作: " docker_choice
@@ -236,7 +181,7 @@ case $choice in
                 esac
             done
             ;;
-        4)
+        3)
             while :; do
                 display_utility_menu
                 read -p "请选择实用工具的操作: " util_choice
@@ -273,6 +218,10 @@ case $choice in
                         curl -Lso- bench.sh | bash
                         read -p "按任意键继续... " pause
                         ;;
+                    6)
+                        add_sshpasswd
+                        read -p "按任意键继续... " pause
+                        ;;
                     0)
                         break
                         ;;
@@ -284,46 +233,7 @@ case $choice in
                 esac
             done
             ;;
-        5)
-            while :; do
-                display_system_menu
-                read -p "请选择你的的操作: " system_choice
-
-                case $system_choice in
-                1)  # 设置你的ROOT密码
-                    clear
-                    echo "设置你的ROOT密码"
-                    passwd
-                    sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
-                    sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-                    service sshd restart
-                    echo "ROOT登录设置完毕！"
-
-                    read -p "需要重启服务器吗？(Y/N): " choice
-                    case "$choice" in
-                    [Yy])
-                        reboot
-                        ;;
-                    [Nn])
-                        echo "已取消"
-                        ;;
-                    *)
-                        echo "无效的选择，请输入 Y 或 N。"
-                        ;;
-                    esac
-                    ;;
-                    0)
-                        break
-                        ;;
-                    *)
-                        clear
-                        echo "❌无效选项 $system_choice"
-                        read -p "按任意键继续... " pause
-                        ;;
-                esac
-            done
-            ;;
-        6)
+        4)
         clear
         # 检查并安装 wget（如果需要）
             if ! command -v wget &>/dev/null; then
@@ -339,7 +249,7 @@ case $choice in
         wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
         read -p "按任意键继续... " pause
         ;;
-        7)
+        5)
         clear
         # 检查并安装 wget（如果需要）
             if ! command -v wget &>/dev/null; then
@@ -356,8 +266,7 @@ case $choice in
         chmod +x tcpx.sh
         ./tcpx.sh
         ;;
-
-        8)
+        6)
             while :; do
             display_panel_menu
             read -p "请选择你的的操作: " panel_choice
@@ -434,15 +343,6 @@ case $choice in
             echo -e "$MESSAGE"  
             read -p "按任意键返回主菜单... " pause
             ;;
-        0)
-            break
-            ;;
-        *)
-            clear
-            echo "❌无效选项 $choice"
-            read -p "按任意键继续... " pause
-            ;;
-            
         0)
             break
             ;;
