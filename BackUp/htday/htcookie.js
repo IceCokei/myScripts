@@ -2,7 +2,7 @@
 海天美味馆小程序 Cookie
 
 [rewrite_local]
-https://cmallapi.haday.cn/buyer-api/members/pointTask url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js
+^https:\/\/cmallapi\.haday\.cn\/buyer-api\/ url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js
 
 [MITM]
 hostname = cmallapi.haday.cn
@@ -15,10 +15,13 @@ if ($request) {
     const deviceId = $request.headers['uuid'];
 
     if (auth && deviceId) {
-        $.setdata(auth + '#' + deviceId, 'htday');
-        $.msg($.name, '✅ Cookie获取成功');
+        if ($.setdata(auth + '#' + deviceId, 'htday')) {
+            $.msg($.name, '', '✅ Cookie获取成功！');
+        } else {
+            $.msg($.name, '', '❌ Cookie写入失败，请重试！');
+        }
     } else {
-        $.msg($.name, '❌ Cookie获取失败');
+        $.msg($.name, '', '❌ 未找到Cookie，请检查请求头！');
     }
 }
 
