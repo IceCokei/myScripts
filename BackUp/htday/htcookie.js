@@ -2,7 +2,7 @@
 海天美味馆小程序 Cookie
 
 [rewrite_local]
-https://cmallapi.haday.cn/buyer-api/members/pointTask url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/haitian.js
+https://cmallapi.haday.cn/buyer-api/members/pointTask url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js
 
 [MITM]
 hostname = cmallapi.haday.cn
