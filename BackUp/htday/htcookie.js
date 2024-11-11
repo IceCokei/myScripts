@@ -20,20 +20,15 @@ function GetCookie() {
             const deviceId = $request.headers['uuid'];
             
             if (auth && deviceId) {
-                const oldCookie = $.read(cookieName);
                 const newCookie = `${auth}#${deviceId}`;
                 
-                if (oldCookie !== newCookie) {
-                    if ($.write(newCookie, cookieName)) {
-                        $.notify("海天美味馆", "", "✅ Cookie获取/更新成功！");
-                    } else {
-                        $.notify("海天美味馆", "", "❌ Cookie写入失败，请重试！");
-                    }
+                if ($.write(newCookie, cookieName)) {
+                    $.notify("海天美味馆", "", "✅ Cookie获取/更新成功！");
                 } else {
-                    $.notify("海天美味馆", "", "ℹ️ Cookie没有变化，无需更新");
+                    $.notify("海天美味馆", "", "❌ Cookie写入失败，请重试！");
                 }
             } else {
-                $.notify("海天美味馆", "", "❌ 未找到有效的Cookie信息，请重试！");
+                $.notify("海天美味馆", "", "❌ 未找到有效的Authorization或uuid，请重试！");
             }
             
             $.log(`🎯 触发URL: ${$request.url}`);
@@ -45,6 +40,7 @@ function GetCookie() {
         $.notify("海天美味馆", "", "❌ Cookie获取失败，请查看日志！");
     }
 }
+
 
 // prettier-ignore
 /*********************************** API *************************************/
