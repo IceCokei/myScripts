@@ -2,7 +2,6 @@
 海天美味馆小程序 Cookie
 */
 
-const $ = new Env("海天美味馆Cookie");
 const cookieName = "htday";
 
 !(async () => {
@@ -10,8 +9,8 @@ const cookieName = "htday";
         await GetCookie();
     }
 })()
-.catch((e) => $.log(e))
-.finally(() => $.done());
+.catch((e) => console.log(e))
+.finally(() => $done());
 
 function GetCookie() {
     try {
@@ -22,25 +21,24 @@ function GetCookie() {
             if (auth && deviceId) {
                 const newCookie = `${auth}#${deviceId}`;
                 
-                if ($.write(newCookie, cookieName)) {
-                    $.notify("海天美味馆", "", "✅ Cookie获取/更新成功！");
+                if ($persistentStore.write(newCookie, cookieName)) {
+                    $notification.post("海天美味馆", "", "✅ Cookie获取/更新成功！");
                 } else {
-                    $.notify("海天美味馆", "", "❌ Cookie写入失败，请重试！");
+                    $notification.post("海天美味馆", "", "❌ Cookie写入失败，请重试！");
                 }
             } else {
-                $.notify("海天美味馆", "", "❌ 未找到有效的Authorization或uuid，请重试！");
+                $notification.post("海天美味馆", "", "❌ 未找到有效的Authorization或uuid，请重试！");
             }
             
-            $.log(`🎯 触发URL: ${$request.url}`);
-            $.log(`📝 Auth: ${auth}`);
-            $.log(`📝 UUID: ${deviceId}`);
+            console.log(`🎯 触发URL: ${$request.url}`);
+            console.log(`📝 Auth: ${auth}`);
+            console.log(`📝 UUID: ${deviceId}`);
         }
     } catch (e) {
-        $.log(`❌ Cookie获取失败！原因: ${e}`);
-        $.notify("海天美味馆", "", "❌ Cookie获取失败，请查看日志！");
+        console.log(`❌ Cookie获取失败！原因: ${e}`);
+        $notification.post("海天美味馆", "", "❌ Cookie获取失败，请查看日志！");
     }
 }
-
 
 // prettier-ignore
 /*********************************** API *************************************/
