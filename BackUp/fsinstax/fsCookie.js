@@ -1,7 +1,3 @@
-/*
-富士instax 小程序 Cookie
-*/
-
 const $ = new Env('富士instax玩拍由我俱乐部');
 let INSTAX = $persistentStore.read("INSTAX") || "[]";
 
@@ -10,34 +6,34 @@ let INSTAX = $persistentStore.read("INSTAX") || "[]";
         await getCookie();
     }
 })()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done());
+    .catch((e) => console.log(e))
+    .finally(() => $done());
 
 // 获取Cookie
 async function getCookie() {
     try {
-        // 获取token
+        // 获取 Authorization Token
         const token = $request.headers["Authorization"] || $request.headers["authorization"];
         if (!token) {
-            $.log("❌ 未找到Authorization");
+            $.log("❌ 未找到 Authorization");
             return;
         }
         
         // 解析响应体
         const body = JSON.parse($response.body);
         if (!body?.data?.user) {
-            $.log("❌ 未找到用户信息");
+            $.log("❌ 未找到用户信息数据");
             return;
         }
-        
-        // 获取用户信息
+
+        // 从 JSON 响应中获取需要的字段
         const userData = {
             "id": body.data.user.phone_number,      // 手机号
             "userId": body.data.user.id,            // 用户ID
             "token": token                          // Bearer token
         };
-        
-        // 转换现有数据为数组
+
+        // 解析并更新存储的用户数据
         let INSTAX_ARR = [];
         try {
             INSTAX_ARR = JSON.parse(INSTAX);
@@ -45,8 +41,8 @@ async function getCookie() {
         } catch (e) {
             INSTAX_ARR = [];
         }
-        
-        // 检查是否已存在
+
+        // 检查是否已经存在该用户数据
         const index = INSTAX_ARR.findIndex(item => item.id === userData.id);
         if (index !== -1) {
             if (INSTAX_ARR[index].token !== userData.token) {
@@ -60,7 +56,7 @@ async function getCookie() {
             $.msg($.name, `✅ 新增成功`, `用户：${userData.id}`);
         }
         
-        $.log(`📝 当前共有${INSTAX_ARR.length}个账号`);
+        $.log(`📝 当前共有 ${INSTAX_ARR.length} 个账号`);
         
     } catch (e) {
         $.logErr(e);
