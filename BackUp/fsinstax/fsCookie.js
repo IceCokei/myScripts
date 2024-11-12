@@ -2,69 +2,67 @@
 富士instax 小程序 Cookie
 */
 
-const $ = new Env('富士instax玩拍由我俱乐部');
-let INSTAX = $persistentStore.read("INSTAX") || "[]";
+const cookieName = "INSTAX";
 
 !(async () => {
     if (typeof $request !== 'undefined') {
-        await getCookie();
+        await GetCookie();
     }
 })()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done());
+    .catch((e) => console.log(e))
+    .finally(() => $done());
 
-// 获取Cookie
-async function getCookie() {
+function GetCookie() {
     try {
-        // 获取token
-        const token = $request.headers["Authorization"] || $request.headers["authorization"];
-        if (!token) {
-            $.log("❌ 未找到Authorization");
-            return;
-        }
-        
-        // 解析响应体
-        const body = JSON.parse($response.body);
-        if (!body?.data?.user) {
-            $.log("❌ 未找到用户信息");
-            return;
-        }
-        
-        // 获取用户信息
-        const userData = {
-            "id": body.data.user.phone_number,      // 手机号
-            "userId": body.data.user.id,            // 用户ID
-            "token": token                          // Bearer token
-        };
-        
-        // 转换现有数据为数组
-        let INSTAX_ARR = [];
-        try {
-            INSTAX_ARR = JSON.parse(INSTAX);
-            if (!Array.isArray(INSTAX_ARR)) INSTAX_ARR = [];
-        } catch (e) {
-            INSTAX_ARR = [];
-        }
-        
-        // 检查是否已存在
-        const index = INSTAX_ARR.findIndex(item => item.id === userData.id);
-        if (index !== -1) {
-            if (INSTAX_ARR[index].token !== userData.token) {
-                INSTAX_ARR[index] = userData;
-                $persistentStore.write(JSON.stringify(INSTAX_ARR), "INSTAX");
-                $.msg($.name, `🔄 更新成功`, `用户：${userData.id}`);
+        if ($request && $request.headers) {
+            const token = $request.headers['Authorization'] || $request.headers['authorization'];
+            const body = JSON.parse($response.body);
+            
+            if (token && body?.data?.user) {
+                const userData = {
+                    "id": body.data.user.phone_number,      // 手机号
+                    "userId": body.data.user.id,            // 用户ID
+                    "token": token                          // Bearer token
+                };
+
+                // 读取现有数据
+                let existingData = $persistentStore.read(cookieName);
+                let dataArray = [];
+                
+                try {
+                    dataArray = JSON.parse(existingData || '[]');
+                    if (!Array.isArray(dataArray)) dataArray = [];
+                } catch (e) {
+                    dataArray = [];
+                }
+
+                // 检查是否存在相同账号
+                const index = dataArray.findIndex(item => item.id === userData.id);
+                
+                if (index !== -1) {
+                    // 更新已存在的账号
+                    if (dataArray[index].token !== userData.token) {
+                        dataArray[index] = userData;
+                        if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                            $notification.post("富士instax", "", `✅ 更新成功！账号: ${userData.id}`);
+                        }
+                    }
+                } else {
+                    // 添加新账号
+                    dataArray.push(userData);
+                    if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                        $notification.post("富士instax", "", `✅ 新增成功！账号: ${userData.id}`);
+                    }
+                }
+                
+                console.log(`📝 当前共有${dataArray.length}个账号`);
+            } else {
+                $notification.post("富士instax", "", "❌ 未找到用户信息，请重试！");
             }
-        } else {
-            INSTAX_ARR.push(userData);
-            $persistentStore.write(JSON.stringify(INSTAX_ARR), "INSTAX");
-            $.msg($.name, `✅ 新增成功`, `用户：${userData.id}`);
         }
-        
-        $.log(`📝 当前共有${INSTAX_ARR.length}个账号`);
-        
     } catch (e) {
-        $.logErr(e);
-        $.msg($.name, `❌ 获取失败`, `请检查日志`);
+        console.log(`❌ Cookie获取失败！原因: ${e}`);
+        $notification.post("富士instax", "", "❌ Cookie获取失败，请查看日志！");
     }
 }
 
