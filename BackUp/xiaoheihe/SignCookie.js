@@ -17,14 +17,21 @@ const cookieName = "xiaoheihe";
 function GetCookie() {
     try {
         if ($request && $request.headers) {
+            // 获取Cookie
             const cookie = $request.headers['Cookie'] || $request.headers['cookie'];
-            const imei = $request.headers['imei'] || '';
-            const heybox_id = $request.headers['heybox_id'] || '';
-            const version = $request.headers['version'] || '';
 
-            if (cookie) {
+            // 从URL参数中获取其他信息
+            const url = new URL($request.url);
+            const params = url.searchParams;
+
+            // 获取必要参数
+            const heybox_id = params.get('heybox_id') || '';
+            const version = params.get('version') || '';
+            const device_id = params.get('device_id') || '';
+
+            if (cookie && heybox_id && version) {
                 // 组合所需参数
-                const cookieValue = `${cookie}&${imei}&${heybox_id}&${version}`;
+                const cookieValue = `${cookie}&${device_id}&${heybox_id}&${version}`;
 
                 // 获取已存储的Cookie
                 const oldCookie = $persistentStore.read(cookieName);
@@ -37,12 +44,12 @@ function GetCookie() {
                     $notification.post("小黑盒", "", "❌ Cookie写入失败，请重试！");
                 }
             } else {
-                $notification.post("小黑盒", "", "❌ 未找到有效的Cookie，请重试！");
+                $notification.post("小黑盒", "", "❌ 未获取到完整信息，请重试！");
             }
 
             console.log(`🎯 触发URL: ${$request.url}`);
             console.log(`📝 Cookie: ${cookie}`);
-            console.log(`📱 IMEI: ${imei}`);
+            console.log(`📱 DeviceID: ${device_id}`);
             console.log(`👤 HeyboxID: ${heybox_id}`);
             console.log(`📦 Version: ${version}`);
         }
