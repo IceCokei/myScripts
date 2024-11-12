@@ -4,17 +4,24 @@
 变量值格式：cookie&device_id&heybox_id&version
 */
 
+const $ = new Env('xiaoheihe');
 const cookieName = "xiaoheihe";
+
+console.log('脚本开始执行');
 
 !(async () => {
     if (typeof $request !== 'undefined') {
-        // 修改为只匹配 home_v2 接口
+        console.log('检测到请求:', $request.url);
+        
         if ($request.url.indexOf('/account/home_v2') > -1) {
             await GetCookie();
         }
     }
 })()
-    .catch((e) => console.log(e))
+    .catch((e) => {
+        console.log('脚本执行出错:', e);
+        $.msg($.name, '❌执行失败', e.message || e);
+    })
     .finally(() => $done());
 
 function GetCookie() {
@@ -22,7 +29,7 @@ function GetCookie() {
         if ($request && $request.headers) {
             // 获取Cookie
             const cookie = $request.headers['Cookie'] || $request.headers['cookie'];
-            
+
             // 解析Cookie中的关键参数
             const getCookieValue = (name) => {
                 const match = cookie.match(new RegExp(`${name}=([^;]+)`));
@@ -42,7 +49,7 @@ function GetCookie() {
             // 从URL中获取参数
             const url = new URL($request.url);
             const params = url.searchParams;
-            
+
             // 获取必要参数
             const time = params.get('_time');
             const nonce = params.get('nonce');
