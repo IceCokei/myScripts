@@ -34,6 +34,11 @@ function GetCookie() {
                 "token": token.replace('Bearer ', '')   // 移除Bearer前缀
             };
 
+            // 手机号码格式化函数
+            const formatPhoneNumber = (phone) => {
+                return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+            };
+
             console.log(`获取到的数据: ${JSON.stringify(userData)}`);
 
             // 读取现有数据
@@ -63,7 +68,9 @@ function GetCookie() {
             }
 
             console.log(`当前数据: ${JSON.stringify(dataArray)}`);
-            console.log(`📝 当前共有${dataArray.length}个账号`);
+            const formattedPhone = formatPhoneNumber(userData.id);
+            console.log(`📱 账号: ${formattedPhone}`);
+            console.log(`👥 当前共有${dataArray.length}个账号`);
         }
     } catch (e) {
         console.log(`❌ Cookie获取失败！原因: ${e}`);
