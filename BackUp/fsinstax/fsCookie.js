@@ -1,59 +1,73 @@
-const $ = new Env('富士instax玩拍由我俱乐部');
-let INSTAX = $persistentStore.read("INSTAX") || "[]";
+/*
+富士instax 小程序 Cookie
+*/
+
+const cookieName = "INSTAX";
 
 !(async () => {
     if (typeof $response !== 'undefined') {
-        await getCookie();
+        await GetCookie();
     }
 })()
-    .catch((e) => $.logErr(e))
+    .catch((e) => console.log(e))
     .finally(() => $done());
 
-async function getCookie() {
+function GetCookie() {
     try {
-        const token = $request.headers["Authorization"] || $request.headers["authorization"];
-        if (!token) {
-            $.log("❌ 未找到 Authorization");
-            return;
-        }
-
-        const body = JSON.parse($response.body);
-        if (!body?.data?.user) {
-            $.log("❌ 未找到用户信息数据");
-            return;
-        }
-
-        const userData = {
-            id: body.data.user.phone_number,
-            userId: body.data.user.id,
-            token: token
-        };
-
-        let INSTAX_ARR = [];
-        try {
-            INSTAX_ARR = JSON.parse(INSTAX);
-            if (!Array.isArray(INSTAX_ARR)) INSTAX_ARR = [];
-        } catch (e) {
-            INSTAX_ARR = [];
-        }
-
-        const index = INSTAX_ARR.findIndex(item => item.id === userData.id);
-        if (index !== -1) {
-            if (INSTAX_ARR[index].token !== userData.token) {
-                INSTAX_ARR[index] = userData;
-                $persistentStore.write(JSON.stringify(INSTAX_ARR), "INSTAX");
-                $.msg($.name, `🔄 更新成功`, `用户：${userData.id}`);
+        if ($request && $request.headers) {
+            const token = $request.headers['Authorization'] || $request.headers['authorization'];
+            if (!token) {
+                $notification.post("富士instax", "", "❌ 未找到Authorization");
+                return;
             }
-        } else {
-            INSTAX_ARR.push(userData);
-            $persistentStore.write(JSON.stringify(INSTAX_ARR), "INSTAX");
-            $.msg($.name, `✅ 新增成功`, `用户：${userData.id}`);
-        }
 
-        $.log(`📝 当前共有 ${INSTAX_ARR.length} 个账号`);
+            const body = JSON.parse($response.body);
+            if (!body?.data?.user) {
+                $notification.post("富士instax", "", "❌ 未找到用户信息");
+                return;
+            }
+
+            // 获取所需的三个字段
+            const userData = {
+                "id": body.data.user.phone_number,      // 手机号
+                "userId": body.data.user.id,            // 用户ID
+                "token": token.replace('Bearer ', '')   // 移除Bearer前缀
+            };
+
+            console.log(`获取到的数据: ${JSON.stringify(userData)}`);
+
+            // 读取现有数据
+            let existingData = $persistentStore.read(cookieName);
+            let dataArray = [];
+            try {
+                dataArray = JSON.parse(existingData || '[]');
+                if (!Array.isArray(dataArray)) dataArray = [];
+            } catch (e) {
+                dataArray = [];
+            }
+
+            // 检查是否存在相同账号
+            const index = dataArray.findIndex(item => item.id === userData.id);
+            if (index !== -1) {
+                if (dataArray[index].token !== userData.token) {
+                    dataArray[index] = userData;
+                    if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                        $notification.post("富士instax", "", `✅ 更新成功！账号: ${userData.id}`);
+                    }
+                }
+            } else {
+                dataArray.push(userData);
+                if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                    $notification.post("富士instax", "", `✅ 新增成功！账号: ${userData.id}`);
+                }
+            }
+
+            console.log(`当前数据: ${JSON.stringify(dataArray)}`);
+            console.log(`📝 当前共有${dataArray.length}个账号`);
+        }
     } catch (e) {
-        $.logErr(e);
-        $.msg($.name, `❌ 获取失败`, `请检查日志`);
+        console.log(`❌ Cookie获取失败！原因: ${e}`);
+        $notification.post("富士instax", "", "❌ Cookie获取失败，请查看日志！");
     }
 }
 
