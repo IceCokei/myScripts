@@ -1,14 +1,18 @@
 /*
 小黑盒 Cookie
 变量名：xiaoheihe
-变量值格式：cookie&imei&heybox_id&version
+变量值格式：cookie&device_id&heybox_id&version
 */
 
 const cookieName = "xiaoheihe";
 
 !(async () => {
     if (typeof $request !== 'undefined') {
-        await GetCookie();
+        // 只在特定接口获取Cookie
+        if ($request.url.indexOf('account/get_async_js') > -1 || 
+            $request.url.indexOf('account/ad/get_overall_ad_info') > -1) {
+            await GetCookie();
+        }
     }
 })()
     .catch((e) => console.log(e))
@@ -19,31 +23,37 @@ function GetCookie() {
         if ($request && $request.headers) {
             // 获取Cookie
             const cookie = $request.headers['Cookie'] || $request.headers['cookie'];
-
+            
             // 从URL参数中获取其他信息
             const url = new URL($request.url);
             const params = url.searchParams;
-
+            
             // 获取必要参数
             const heybox_id = params.get('heybox_id') || '';
             const version = params.get('version') || '';
             const device_id = params.get('device_id') || '';
-
-            if (cookie && heybox_id && version) {
+            
+            if (cookie && heybox_id && version && device_id) {
                 // 组合所需参数
                 const cookieValue = `${cookie}&${device_id}&${heybox_id}&${version}`;
-
+                
                 // 获取已存储的Cookie
                 const oldCookie = $persistentStore.read(cookieName);
-
+                
                 if (oldCookie === cookieValue) {
+                    console.log("⚠️ Cookie没有变化，无需更新");
                     $notification.post("小黑盒", "", "⚠️ Cookie没有变化，无需更新");
-                } else if ($persistentStore.write(cookieValue, cookieName)) {
-                    $notification.post("小黑盒", "", "✅ Cookie获取/更新成功！");
                 } else {
-                    $notification.post("小黑盒", "", "❌ Cookie写入失败，请重试！");
+                    if ($persistentStore.write(cookieValue, cookieName)) {
+                        console.log("✅ Cookie获取/更新成功！");
+                        $notification.post("小黑盒", "", "✅ Cookie获取/更新成功！");
+                    } else {
+                        console.log("❌ Cookie写入失败，请重试！");
+                        $notification.post("小黑盒", "", "❌ Cookie写入失败，请重试！");
+                    }
                 }
             } else {
+                console.log("❌ 未获取到完整信息，请重试！");
                 $notification.post("小黑盒", "", "❌ 未获取到完整信息，请重试！");
             }
 
