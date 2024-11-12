@@ -1,0 +1,12 @@
+#!name=媓钻小程序
+#!desc=获取Cookie
+#!author = Coke🅥
+#!homepage=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/README.md
+#!date = 2024-11-12 15:53:01
+
+[Script]
+# 获取Cookie
+http-request ^https:\/\/api\.hzyxhfp\.com\/api\/banners script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/huangzuan/hzCookie.js, timeout=60, tag=媓钻Cookie
+
+[MITM]
+hostname = api.hzyxhfp.com
