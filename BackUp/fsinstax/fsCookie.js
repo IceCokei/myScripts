@@ -16,49 +16,51 @@ function GetCookie() {
     try {
         if ($request && $request.headers) {
             const token = $request.headers['Authorization'] || $request.headers['authorization'];
-            const body = JSON.parse($response.body);
-            
-            if (token && body?.data?.user) {
-                const userData = {
-                    "id": body.data.user.phone_number,      // 手机号
-                    "userId": body.data.user.id,            // 用户ID
-                    "token": token                          // Bearer token
-                };
-
-                // 读取现有数据
-                let existingData = $persistentStore.read(cookieName);
-                let dataArray = [];
-                
-                try {
-                    dataArray = JSON.parse(existingData || '[]');
-                    if (!Array.isArray(dataArray)) dataArray = [];
-                } catch (e) {
-                    dataArray = [];
-                }
-
-                // 检查是否存在相同账号
-                const index = dataArray.findIndex(item => item.id === userData.id);
-                
-                if (index !== -1) {
-                    // 更新已存在的账号
-                    if (dataArray[index].token !== userData.token) {
-                        dataArray[index] = userData;
-                        if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
-                            $notification.post("富士instax", "", `✅ 更新成功！账号: ${userData.id}`);
-                        }
-                    }
-                } else {
-                    // 添加新账号
-                    dataArray.push(userData);
-                    if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
-                        $notification.post("富士instax", "", `✅ 新增成功！账号: ${userData.id}`);
-                    }
-                }
-                
-                console.log(`📝 当前共有${dataArray.length}个账号`);
-            } else {
-                $notification.post("富士instax", "", "❌ 未找到用户信息，请重试！");
+            if (!token) {
+                $notification.post("富士instax", "", "❌ 未找到Authorization");
+                return;
             }
+
+            const body = JSON.parse($response.body);
+            if (!body?.data?.user) {
+                $notification.post("富士instax", "", "❌ 未找到用户信息");
+                return;
+            }
+
+            // 获取所需的三个字段
+            const userData = {
+                "id": body.data.user.phone_number,      // 手机号
+                "userId": body.data.user.id,            // 用户ID
+                "token": token                          // Bearer token
+            };
+
+            // 读取现有数据
+            let existingData = $persistentStore.read(cookieName);
+            let dataArray = [];
+            try {
+                dataArray = JSON.parse(existingData || '[]');
+                if (!Array.isArray(dataArray)) dataArray = [];
+            } catch (e) {
+                dataArray = [];
+            }
+
+            // 检查是否存在相同账号
+            const index = dataArray.findIndex(item => item.id === userData.id);
+            if (index !== -1) {
+                if (dataArray[index].token !== userData.token) {
+                    dataArray[index] = userData;
+                    if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                        $notification.post("富士instax", "", `✅ 更新成功！账号: ${userData.id}`);
+                    }
+                }
+            } else {
+                dataArray.push(userData);
+                if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                    $notification.post("富士instax", "", `✅ 新增成功！账号: ${userData.id}`);
+                }
+            }
+
+            console.log(`📝 当前共有${dataArray.length}个账号`);
         }
     } catch (e) {
         console.log(`❌ Cookie获取失败！原因: ${e}`);
