@@ -2,38 +2,33 @@ const $ = new Env('富士instax玩拍由我俱乐部');
 let INSTAX = $persistentStore.read("INSTAX") || "[]";
 
 !(async () => {
-    if (typeof $request !== 'undefined') {
+    if (typeof $response !== 'undefined') {
         await getCookie();
     }
 })()
-    .catch((e) => console.log(e))
+    .catch((e) => $.logErr(e))
     .finally(() => $done());
 
-// 获取Cookie
 async function getCookie() {
     try {
-        // 获取 Authorization Token
         const token = $request.headers["Authorization"] || $request.headers["authorization"];
         if (!token) {
             $.log("❌ 未找到 Authorization");
             return;
         }
-        
-        // 解析响应体
+
         const body = JSON.parse($response.body);
         if (!body?.data?.user) {
             $.log("❌ 未找到用户信息数据");
             return;
         }
 
-        // 从 JSON 响应中获取需要的字段
         const userData = {
-            "id": body.data.user.phone_number,      // 手机号
-            "userId": body.data.user.id,            // 用户ID
-            "token": token                          // Bearer token
+            id: body.data.user.phone_number,
+            userId: body.data.user.id,
+            token: token
         };
 
-        // 解析并更新存储的用户数据
         let INSTAX_ARR = [];
         try {
             INSTAX_ARR = JSON.parse(INSTAX);
@@ -42,7 +37,6 @@ async function getCookie() {
             INSTAX_ARR = [];
         }
 
-        // 检查是否已经存在该用户数据
         const index = INSTAX_ARR.findIndex(item => item.id === userData.id);
         if (index !== -1) {
             if (INSTAX_ARR[index].token !== userData.token) {
@@ -55,9 +49,8 @@ async function getCookie() {
             $persistentStore.write(JSON.stringify(INSTAX_ARR), "INSTAX");
             $.msg($.name, `✅ 新增成功`, `用户：${userData.id}`);
         }
-        
+
         $.log(`📝 当前共有 ${INSTAX_ARR.length} 个账号`);
-        
     } catch (e) {
         $.logErr(e);
         $.msg($.name, `❌ 获取失败`, `请检查日志`);
