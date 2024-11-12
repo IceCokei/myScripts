@@ -1,7 +1,6 @@
 /*
 富士instax 小程序 Cookie
 */
-
 const cookieName = "INSTAX";
 
 !(async () => {
@@ -39,8 +38,6 @@ function GetCookie() {
                 return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
             };
 
-            console.log(`获取到的数据: ${JSON.stringify(userData)}`);
-
             // 读取现有数据
             let existingData = $persistentStore.read(cookieName);
             let dataArray = [];
@@ -53,23 +50,22 @@ function GetCookie() {
 
             // 检查是否存在相同账号
             const index = dataArray.findIndex(item => item.id === userData.id);
+            const formattedPhone = formatPhoneNumber(userData.id);
             if (index !== -1) {
                 if (dataArray[index].token !== userData.token) {
                     dataArray[index] = userData;
                     if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
-                        $notification.post("富士instax", "", `✅ 更新成功！账号: ${userData.id}`);
+                        $notification.post("富士instax", "", `✅ 更新成功！\n账号: ${formattedPhone}\nuserId: ${userData.userId}\ntoken: ${userData.token}`);
                     }
                 }
             } else {
                 dataArray.push(userData);
                 if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
-                    $notification.post("富士instax", "", `✅ 新增成功！账号: ${userData.id}`);
+                    $notification.post("富士instax", "", `✅ 新增成功！\n账号: ${formattedPhone}\nuserId: ${userData.userId}\ntoken: ${userData.token}`);
                 }
             }
 
-            console.log(`当前数据: ${JSON.stringify(dataArray)}`);
-            const formattedPhone = formatPhoneNumber(userData.id);
-            console.log(`📱 账号: ${formattedPhone}`);
+            // 控制台输出当前账户数量
             console.log(`👥 当前共有${dataArray.length}个账号`);
         }
     } catch (e) {
