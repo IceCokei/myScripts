@@ -1,12 +1,15 @@
-#!name=富士instax玩拍由我俱乐部
+#!name=富士instax
 #!desc=获取Cookie
 #!author = Coke🅥
 #!homepage=https://github.com/IceCokei/myScripts
-#!date = 2024-11-13 03:30:56
+#!date = 2024-11-13 05:30:56
 
 [Script]
 # 获取Cookie
 http-response ^https:\/\/instax\.app\.xcxd\.net\.cn\/api\/me$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsCookie.js, requires-body=true, timeout=60, tag=富士instaxCookie
+
+# 定时任务
+cron "30 0 * * *" script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsinstax.js, timeout=60, tag=富士instax每日任务
 
 [MITM]
 hostname = instax.app.xcxd.net.cn
