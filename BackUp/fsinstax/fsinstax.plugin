@@ -6,7 +6,7 @@
 
 [Script]
 # 获取Cookie
-http-response ^https:\/\/instax\.app\.xcxd\.net\.cn\/api\/me script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsCookie.js, requires-body=true, timeout=60, tag=富士instaxCookie
+http-response ^https:\/\/instax\.app\.xcxd\.net\.cn\/api\/.* script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsCookie.js, requires-body=true, timeout=60, tag=富士instaxCookie
 
 [MITM]
 hostname = instax.app.xcxd.net.cn
