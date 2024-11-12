@@ -1,14 +1,16 @@
 #!name=海天美味馆小程序
 #!desc=获取Cookie
+#!author = Coke🅥
 #!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/icon.png
 #!homepage=https://github.com/IceCokei/myScripts
+#!date = 2024-11-12 04:00:01
 
 [Script]
 # 获取Cookie
 http-request ^https:\/\/cmallapi\.haday\.cn\/buyer-api\/members\/points\/current script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js, timeout=60, tag=海天美味馆Cookie
 
 # 定时任务
-cron "5 0 * * *" script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/haitian.js, tag=海天美味馆签到
+cron "1 0 * * *" script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/haitian.js, tag=海天美味馆签到
 
 [MITM]
 hostname = cmallapi.haday.cn
