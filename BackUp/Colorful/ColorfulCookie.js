@@ -16,77 +16,31 @@ const $ = new Env('七彩虹商城CK');
 function GetCookie() {
     try {
         if ($request && $request.headers) {
-            // 获取认证信息
             const auth = $request.headers['Authorization'] || $request.headers['authorization'];
             const xAuth = $request.headers['X-Authorization'] || $request.headers['x-authorization'];
             
-            if (!auth || !xAuth) {
-                $.msg("七彩虹商城", "", "❌ 未找到有效的Authorization信息");
-                return;
-            }
-
-            // 提取token
-            const token = auth.replace('Bearer ', '');
-            const refreshToken = xAuth.replace('Bearer ', '');
-            
-            // 获取现有配置
-            let accounts = $.getjson(cookieName) || [];
-            
-            // 解析JWT获取用户信息
-            const userInfo = parseJwt(token);
-            const userId = userInfo?.jti || '未知ID';
-            const userName = userInfo?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || '未知用户';
-
-            // 构建账号数据
-            const accountData = {
-                id: userName,
-                token: token,
-                refreshToken: refreshToken,
-                body: JSON.stringify({"phone": ""})  // 预留手机号字段
-            };
-
-            // 检查是否已存在该账号
-            const existingIndex = accounts.findIndex(acc => acc.id === accountData.id);
-            
-            if (existingIndex !== -1) {
-                accounts[existingIndex] = accountData;
-                $.msg("七彩虹商城", "", `✅ ${userName} 更新Cookie成功！`);
+            if (auth && xAuth) {
+                const token = auth.replace('Bearer ', '');
+                const refreshToken = xAuth.replace('Bearer ', '');
+                
+                const newCookie = `${token}#${refreshToken}`;
+                if ($persistentStore.write(newCookie, cookieName)) {
+                    $.msg("七彩虹商城", "", "✅ Cookie获取成功！");
+                } else {
+                    $.msg("七彩虹商城", "", "❌ Cookie写入失败！");
+                }
+                
+                // 调试日志
+                $.log(`🎯 URL: ${$request.url}`);
+                $.log(`📝 Token: ${token}`);
+                $.log(`📝 RefreshToken: ${refreshToken}`);
             } else {
-                accounts.push(accountData);
-                $.msg("七彩虹商城", "", `✅ ${userName} 添加Cookie成功！`);
+                $.msg("七彩虹商城", "", "❌ 未找到有效的Token！");
             }
-
-            // 保存更新后的配置
-            if ($.setjson(accounts, cookieName)) {
-                $.log(`🎉 账号数据保存成功`);
-            } else {
-                $.msg("七彩虹商城", "", "❌ 账号数据保存失败！");
-            }
-
-            // 调试信息
-            $.log(`🎯 触发URL: ${$request.url}`);
-            $.log(`👤 用户信息: ${userName}(${userId})`);
-            $.log(`📝 Token: ${token}`);
-            $.log(`📝 RefreshToken: ${refreshToken}`);
         }
     } catch (e) {
-        $.logErr(`❌ Cookie获取失败！原因: ${e}`);
+        $.logErr(e);
         $.msg("七彩虹商城", "", "❌ Cookie获取失败，请查看日志！");
-    }
-}
-
-// JWT解析函数
-function parseJwt(token) {
-    try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        $.logErr(`JWT解析失败: ${e}`);
-        return null;
     }
 }
 
