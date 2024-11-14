@@ -13,56 +13,52 @@ let COLORFUL = [];
     .catch((e) => console.log(e))
     .finally(() => $done());
 
-async function GetCookie() {
+function GetCookie() {
     try {
-        if ($request && $request.body) {
-            const requestBody = $request.body;
+        if ($request && $request.headers) {
+            const auth = $request.headers['Authorization'] || $request.headers['authorization'];
+            const xAuth = $request.headers['X-Authorization'] || $request.headers['x-authorization'];
             
-            // Decrypt phone number and get tokens
-            let login = await commonPost('/User/DecryptPhoneNumber', JSON.parse(requestBody));
-            const token = login.Data.Token;
-            const refreshToken = login.Data.RefreshToken;
+            if (auth && xAuth) {
+                const token = auth.replace('Bearer ', '');
+                const refreshToken = xAuth.replace('Bearer ', '');
+                
+                // 从JWT token中解析用户ID
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const id = payload.jti;  // 从token中获取用户ID
+                
+                const newData = {
+                    "id": id,
+                    "token": token,
+                    "refreshToken": refreshToken,
+                    "body": $request.body || ''
+                };
 
-            // Get user info
-            let userInfo = await commonGet('/User/GetUserInfo');
-            if (userInfo.Code === 401) {
-                $notification.post("七彩虹商城", "", "❌ 获取用户信息失败！");
-                return;
-            }
-
-            const id = userInfo.Data.Id;
-            const newData = {
-                "id": id,
-                "token": token,
-                "refreshToken": refreshToken,
-                "body": requestBody
-            };
-
-            // Load existing data
-            try {
-                COLORFUL = JSON.parse($persistentStore.read(cookieName)) || [];
-            } catch (e) {
-                COLORFUL = [];
-            }
-
-            // Update or add new user data
-            const index = COLORFUL.findIndex(e => e.id === newData.id);
-            if (index !== -1) {
-                if (COLORFUL[index].body === newData.body) {
-                    return;
+                try {
+                    COLORFUL = JSON.parse($persistentStore.read(cookieName)) || [];
+                } catch (e) {
+                    COLORFUL = [];
                 }
-                COLORFUL[index] = newData;
-                $notification.post("七彩虹商城", "", `✅ 用户${newData.id}更新成功！`);
-            } else {
-                COLORFUL.push(newData);
-                $notification.post("七彩虹商城", "", `✅ 新增用户${newData.id}成功！`);
-            }
 
-            // Save updated data
-            if ($persistentStore.write(JSON.stringify(COLORFUL), cookieName)) {
-                console.log(`📝 保存成功: ${JSON.stringify(newData)}`);
+                const index = COLORFUL.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    if (COLORFUL[index].token === token) {
+                        return;
+                    }
+                    COLORFUL[index] = newData;
+                    $notification.post("七彩虹商城", "", `✅ 用户${id}更新成功！`);
+                } else {
+                    COLORFUL.push(newData);
+                    $notification.post("七彩虹商城", "", `✅ 新增用户${id}成功！`);
+                }
+
+                if ($persistentStore.write(JSON.stringify(COLORFUL), cookieName)) {
+                    console.log(`📝 保存成功: ${JSON.stringify(newData)}`);
+                } else {
+                    $notification.post("七彩虹商城", "", "❌ 数据保存失败！");
+                }
             } else {
-                $notification.post("七彩虹商城", "", "❌ 数据保存失败！");
+                $notification.post("七彩虹商城", "", "❌ 未找到有效的Authorization信息！");
             }
         }
     } catch (e) {
