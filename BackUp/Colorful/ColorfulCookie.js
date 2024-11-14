@@ -5,8 +5,13 @@
 const cookieName = "COLORFUL";
 
 !(async () => {
-    if (typeof $request !== 'undefined') {
+    if (typeof $request !== 'undefined' && $request.method === 'GET') {
+        console.log("🔍 请求URL:", $request.url);
+        console.log("🔍 请求头:", JSON.stringify($request.headers));
+        
         await GetCookie();
+    } else {
+        console.log("❌ 请求不满足条件");
     }
 })()
     .catch((e) => console.log(e))
@@ -15,8 +20,12 @@ const cookieName = "COLORFUL";
 function GetCookie() {
     try {
         if ($request && $request.headers) {
+            console.log("🔍 开始获取Cookie");
             const token = $request.headers['Authorization'] || $request.headers['authorization'];
             const refreshToken = $request.headers['X-Authorization'];
+            
+            console.log("📝 获取到的token:", token);
+            console.log("📝 获取到的refreshToken:", refreshToken);
             
             if (!token || !refreshToken) {
                 $notification.post("七彩虹商城", "", "❌ 未找到必要的认证信息");
