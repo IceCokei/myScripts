@@ -1,5 +1,5 @@
 #!name = CokeToken 获取cookie
-#!desc = 🥤Coke Scripts 获取cookie
+#!desc = 🥤CokeToken 获取cookie
 #!author = Coke🅥 [https://github.com/IceCokei]
 #!data = 2024-11-13
 #!icon = https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/%E7%88%86%E7%B1%B3%E8%8A%B1.ico
@@ -10,11 +10,13 @@
 arg1 = switch,true,tag=海天美味馆获取Cookie
 arg2 = switch,true,tag=媓钻获取Cookie
 arg3 = switch,true,tag=富士instax获取Cookie
+arg4 = switch,true,tag=七彩虹商城获取Cookie
 
 [Script]
 http-request ^https:\/\/cmallapi\.haday\.cn\/buyer-api\/members\/points\/current script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js, timeout=60, enable = {arg1}, tag=海天美味馆Cookie
 http-request ^https:\/\/api\.hzyxhfp\.com\/api\/banners script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/huangzuan/hzCookie.js, timeout=60, enable = {arg2}, tag=媓钻Cookie
 http-response ^https:\/\/instax\.app\.xcxd\.net\.cn\/api\/me$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsCookie.js, requires-body=true, timeout=60, enable = {arg3}, tag=富士instaxCookie
+http-request ^https:\/\/shop\.skycolorful\.com\/api\/User\/GetUserInfo$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Colorful/ColorfulCookie.js, requires-body=true, timeout=60, enable = {arg4}, tag=七彩虹商城Cookie
 
 [MITM]
-hostname = cmallapi.haday.cn, api.hzyxhfp.com, instax.app.xcxd.net.cn
+hostname = cmallapi.haday.cn, api.hzyxhfp.com, instax.app.xcxd.net.cn, shop.skycolorful.com
