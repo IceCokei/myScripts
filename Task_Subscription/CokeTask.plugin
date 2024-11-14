@@ -15,11 +15,14 @@ arg5 = input,"3 0 * * *",tag=富士instax任务时间
 arg6 = switch,true,tag=富士instax任务开关
 arg7 = input,"10 1 * * *",tag=七彩虹商城任务时间
 arg8 = switch,true,tag=七彩虹商城任务开关
+arg9 = input,"15 1 * * *",tag=健达福利社任务时间
+arg10 = switch,true,tag=健达福利社任务开关
 
 [Script]
 cron {arg1} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/haitian.js, enable= {arg2}, tag=海天美味馆
 cron {arg3} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/huangzuan/hz.js, enable= {arg4}, tag=媓钻
 cron {arg5} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsinstax.js, enable= {arg6}, tag=富士instax
 cron {arg7} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Colorful/Colorful.js, enable= {arg8}, tag=七彩虹商城
+cron {arg9} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/JDFLS/jdfls.js, enable= {arg10}, tag=健达福利社
 
 [MITM]
