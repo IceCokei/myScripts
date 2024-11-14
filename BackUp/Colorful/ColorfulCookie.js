@@ -1,8 +1,8 @@
 /*
-七彩虹商城小程序 Cookie
+七彩虹商城 小程序 Cookie
 */
 
-const cookieName = "htday";
+const cookieName = "COLORFUL";
 
 !(async () => {
     if (typeof $request !== 'undefined') {
@@ -15,34 +15,51 @@ const cookieName = "htday";
 function GetCookie() {
     try {
         if ($request && $request.headers) {
-            const auth = $request.headers['Authorization'] || $request.headers['authorization'];
-            const xAuth = $request.headers['X-Authorization'];
-            const appId = $request.headers['AppId'];
-            const appSecret = $request.headers['AppSecret'];
-            const sign = $request.headers['Sign'];
-            const requestId = $request.headers['requestId'];
-            const ticks = $request.headers['Ticks'];
-
-            if (auth) {
-                const newCookie = `${auth}`;
-
-                if ($persistentStore.write(newCookie, cookieName)) {
-                    $notification.post("七彩虹商城", "", "✅ Cookie获取/更新成功！");
-                } else {
-                    $notification.post("七彩虹商城", "", "❌ Cookie写入失败，请重试！");
-                }
-            } else {
-                $notification.post("七彩虹商城", "", "❌ 未找到有效的Authorization，请重试！");
+            const token = $request.headers['Authorization'] || $request.headers['authorization'];
+            const refreshToken = $request.headers['X-Authorization'];
+            
+            if (!token || !refreshToken) {
+                $notification.post("七彩虹商城", "", "❌ 未找到必要的认证信息");
+                return;
             }
 
-            console.log(`🎯 触发URL: ${$request.url}`);
-            console.log(`📝 Auth: ${auth}`);
-            console.log(`📝 X-Auth: ${xAuth}`);
-            console.log(`📝 AppId: ${appId}`);
-            console.log(`📝 AppSecret: ${appSecret}`);
-            console.log(`📝 Sign: ${sign}`);
-            console.log(`📝 RequestId: ${requestId}`);
-            console.log(`📝 Ticks: ${ticks}`);
+            // 构建用户数据对象
+            const userData = {
+                "id": "1",
+                "token": token,
+                "refreshToken": refreshToken
+            };
+
+            // 读取现有数据
+            let existingData = $persistentStore.read(cookieName);
+            let dataArray = [];
+            try {
+                dataArray = JSON.parse(existingData || '[]');
+                if (!Array.isArray(dataArray)) dataArray = [];
+            } catch (e) {
+                dataArray = [];
+            }
+
+            // 检查是否存在相同账号
+            const index = dataArray.findIndex(item => item.id === userData.id);
+            if (index !== -1) {
+                if (dataArray[index].token !== userData.token || dataArray[index].refreshToken !== userData.refreshToken) {
+                    dataArray[index] = userData;
+                    if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                        $notification.post("七彩虹商城", "", `✅ 更新成功！\ntoken: ${userData.token}\nrefreshToken: ${userData.refreshToken}`);
+                    }
+                }
+            } else {
+                dataArray.push(userData);
+                if ($persistentStore.write(JSON.stringify(dataArray), cookieName)) {
+                    $notification.post("七彩虹商城", "", `✅ 新增成功！\ntoken: ${userData.token}\nrefreshToken: ${userData.refreshToken}`);
+                }
+            }
+
+            // 控制台输出当前账户数量和详细信息
+            console.log(`👥 当前共有${dataArray.length}个账号`);
+            console.log(`📝 Token: ${token}`);
+            console.log(`📝 RefreshToken: ${refreshToken}`);
         }
     } catch (e) {
         console.log(`❌ Cookie获取失败！原因: ${e}`);
