@@ -1,8 +1,8 @@
-#!name = CokeTask 定时任务
+#!name = CokeTask
 #!desc = 🥤Coke Scripts 定时任务
 #!author = Coke🅥 [https://github.com/IceCokei]
 #!data = 2024-11-13
-#!icon = https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/%E7%88%86%E7%B1%B3%E8%8A%B1.ico
+#!icon = 
 #!system = iOS,iPadOS
 #!loon_version = 3.2.3(753)
 
@@ -13,10 +13,13 @@ arg3 = input,"30 8 * * *",tag=媓钻任务时间
 arg4 = switch,true,tag=媓钻任务开关
 arg5 = input,"3 0 * * *",tag=富士instax任务时间
 arg6 = switch,true,tag=富士instax任务开关
+arg7 = input,"10 1 * * *",tag=七彩虹商城任务时间
+arg8 = switch,true,tag=七彩虹商城任务开关
 
 [Script]
 cron {arg1} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/haitian.js, enable= {arg2}, tag=海天美味馆
 cron {arg3} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/huangzuan/hz.js, enable= {arg4}, tag=媓钻
 cron {arg5} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/fsinstax/fsinstax.js, enable= {arg6}, tag=富士instax
+cron {arg7} script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Colorful/Colorful.js, enable= {arg8}, tag=七彩虹商城
 
 [MITM]
