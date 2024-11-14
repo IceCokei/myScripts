@@ -2,10 +2,10 @@
 #!desc=获取Cookie
 #!author = Coke🅥
 #!homepage=https://github.com/IceCokei/myScripts
-#!date = 2024-11-14 19:08:01
+#!date = 2024-11-15 03:46:01
 
 [Script]
-http-request ^https:\/\/mole\.ferrero\.com\.cn\/boss\/(mp\/login\/taobao\/verify|boss\/hammond\/theme\/page\/get)$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/JDFLS/jdflsCookie.js, requires-body=true, tag=健达福利社Cookie
+http-response ^https:\/\/mole\.ferrero\.com\.cn\/boss\/(mp\/login\/taobao\/verify|boss\/hammond\/theme\/page\/get)$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/JDFLS/jdflsCookie.js, requires-body=true, tag=健达福利社Cookie
 
 [MITM]
 hostname = mole.ferrero.com.cn
