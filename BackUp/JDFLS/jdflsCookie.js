@@ -1,7 +1,6 @@
 /*
 健达福利社小程序 Cookie
 */
-
 const cookieName = "JDFLS";
 
 !(async () => {
@@ -17,22 +16,28 @@ function GetCookie() {
         if ($request && $request.headers) {
             const token = $request.headers['KUMI-TOKEN'] || $request.headers['kumi-token'];
             const projectId = $request.headers['PROJECT-ID'] || $request.headers['project-id'];
+            let memberId = null;
 
-            if (token && projectId) {
-                const newCookie = `${token}#${projectId}`;
+            if ($response && $response.body) {
+                const body = JSON.parse($response.body);
+                memberId = body?.data?.memberId;
+            }
 
+            if (token && projectId && memberId) {
+                const newCookie = `${token}#${projectId}#${memberId}`;
                 if ($persistentStore.write(newCookie, cookieName)) {
                     $notification.post("健达福利社", "", "✅ Cookie获取/更新成功！");
                 } else {
                     $notification.post("健达福利社", "", "❌ Cookie写入失败，请重试！");
                 }
             } else {
-                $notification.post("健达福利社", "", "❌ 未找到有效的token或projectId，请重试！");
+                $notification.post("健达福利社", "", "❌ 未找到有效的 token、projectId 或 memberId，请重试！");
             }
 
             console.log(`🎯 触发URL: ${$request.url}`);
             console.log(`📝 Token: ${token}`);
             console.log(`📝 ProjectId: ${projectId}`);
+            console.log(`📝 MemberId: ${memberId}`);
         }
     } catch (e) {
         console.log(`❌ Cookie获取失败！原因: ${e}`);
