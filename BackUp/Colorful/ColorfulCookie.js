@@ -3,7 +3,6 @@
 */
 
 const cookieName = "COLORFUL";
-let COLORFUL = [];
 
 !(async () => {
     if (typeof $request !== 'undefined') {
@@ -20,46 +19,20 @@ function GetCookie() {
             const xAuth = $request.headers['X-Authorization'] || $request.headers['x-authorization'];
             
             if (auth && xAuth) {
-                const token = auth.replace('Bearer ', '');
-                const refreshToken = xAuth.replace('Bearer ', '');
-                
-                // 从JWT token中解析用户ID
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                const id = payload.jti;  // 从token中获取用户ID
-                
-                const newData = {
-                    "id": id,
-                    "token": token,
-                    "refreshToken": refreshToken,
-                    "body": $request.body || ''
-                };
+                const newCookie = `${auth}#${xAuth}`;
 
-                try {
-                    COLORFUL = JSON.parse($persistentStore.read(cookieName)) || [];
-                } catch (e) {
-                    COLORFUL = [];
-                }
-
-                const index = COLORFUL.findIndex(e => e.id === id);
-                if (index !== -1) {
-                    if (COLORFUL[index].token === token) {
-                        return;
-                    }
-                    COLORFUL[index] = newData;
-                    $notification.post("七彩虹商城", "", `✅ 用户${id}更新成功！`);
+                if ($persistentStore.write(newCookie, cookieName)) {
+                    $notification.post("七彩虹商城", "", "✅ Cookie获取/更新成功！");
                 } else {
-                    COLORFUL.push(newData);
-                    $notification.post("七彩虹商城", "", `✅ 新增用户${id}成功！`);
-                }
-
-                if ($persistentStore.write(JSON.stringify(COLORFUL), cookieName)) {
-                    console.log(`📝 保存成功: ${JSON.stringify(newData)}`);
-                } else {
-                    $notification.post("七彩虹商城", "", "❌ 数据保存失败！");
+                    $notification.post("七彩虹商城", "", "❌ Cookie写入失败，请重试！");
                 }
             } else {
-                $notification.post("七彩虹商城", "", "❌ 未找到有效的Authorization信息！");
+                $notification.post("七彩虹商城", "", "❌ 未找到有效的Authorization信息，请重试！");
             }
+
+            console.log(`🎯 触发URL: ${$request.url}`);
+            console.log(`📝 Auth: ${auth}`);
+            console.log(`📝 X-Auth: ${xAuth}`);
         }
     } catch (e) {
         console.log(`❌ Cookie获取失败！原因: ${e}`);
