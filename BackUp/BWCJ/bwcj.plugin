@@ -8,4 +8,4 @@
 http-request ^https:\/\/webapi\.qmai\.cn\/web\/catering\/activity\/get-business-config$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/BWCJ/bwcjCookie.js, requires-body=true, tag=霸王茶姬Cookie
 
 [MITM]
-hostname = miniapp.qmai.cn
+hostname = webapi.qmai.cn
