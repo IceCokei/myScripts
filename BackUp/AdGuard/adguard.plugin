@@ -1,0 +1,10 @@
+#!name=AdGuard 解锁Premium
+#!desc=AdGuard 解锁Premium
+#!author = Coke🅥
+#!date = 2024-11-16 06:12:01
+
+[Script]
+http-response ^https:\/\/mobile-api\.adguard\.org\/api\/.+\/ios_validate_receipt\/(.*?) script-path=, requires-body=true, tag=解锁Premium
+
+[mitm]
+hostname = mobile-api.adguard.org
