@@ -5,7 +5,7 @@
 #!date=2024-11-16 00:21:01
 
 [Script]
-http-request ^https:\/\/miniapp\.qmai\.cn\/web\/catering2-apiserver$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/BWCJ/bwcjCookie.js, requires-body=true, tag=霸王茶姬Cookie
+http-request ^https:\/\/webapi\.qmai\.cn\/web\/catering\/activity\/get-business-config$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/BWCJ/bwcjCookie.js, requires-body=true, tag=霸王茶姬Cookie
 
 [MITM]
 hostname = miniapp.qmai.cn
