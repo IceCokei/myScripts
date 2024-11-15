@@ -1,17 +1,17 @@
 const cookieName = "bwcj";
 
 !(async () => {
-    if (typeof $response !== 'undefined') {
-        await ParseResponse();
+    if (typeof $request !== 'undefined') {
+        await ParseRequest();
     }
 })()
     .catch((e) => console.log(e))
     .finally(() => $done());
 
-async function ParseResponse() {
+async function ParseRequest() {
     try {
-        if ($response && $response.headers) {
-            const token = $response.headers['Qm-User-Token'] || $response.headers['qm-user-token'];
+        if ($request && $request.headers) {
+            const token = $request.headers['Qm-User-Token'] || $request.headers['qm-user-token'];
 
             console.log(`📝 Token: ${token}`);
 
@@ -26,8 +26,8 @@ async function ParseResponse() {
             }
         }
     } catch (e) {
-        console.log(`❌ 解析响应失败: ${e}`);
-        $notification.post("霸王茶姬", "", "❌ 响应解析失败，请查看日志！");
+        console.log(`❌ 解析请求失败: ${e}`);
+        $notification.post("霸王茶姬", "", "❌ 请求解析失败，请查看日志！");
     }
 }
 
