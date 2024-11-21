@@ -175,7 +175,7 @@ current_step=$((current_step + 1))
 show_progress "拉取 Docker 镜像 containrrr/watchtower" $current_step $total_steps
 
 # 启动相关 Docker 容器
-docker run -d -m 2g --memory-swap -1 --name=miaospeed --restart=always --network host -e MIAOSPEED_MTLS=1 -e MIAOSPEED_MMDB=1 -e MIAOSPEED_META=1 -e MIAOSPEED_CONNTHREAD=16 -e MIAOSPEED_TOKEN=$token --dns=223.5.5.5 --dns=223.6.6.6 --dns=119.29.29.29 --dns=114.114.114.114 --dns=114.114.115.115 --dns=182.254.116.116 moshaoli688/miaospeed:latest
+docker run -d -m 2g --memory-swap -1 --name=miaospeed --restart=always --network host -e MIAOSPEED_MTLS=1 -e MIAOSPEED_META=1 -e MIAOSPEED_CONNTHREAD=16 -e MIAOSPEED_TOKEN=$token --dns=223.5.5.5 --dns=223.6.6.6 --dns=119.29.29.29 --dns=114.114.114.114 --dns=114.114.115.115 --dns=182.254.116.116 moshaoli688/miaospeed:latest
 current_step=$((current_step + 1))
 show_progress "启动相关 Docker 容器 miaospeed" $current_step $total_steps
 
