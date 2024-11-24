@@ -13,6 +13,7 @@ arg3 = switch,true,tag=富士instax获取Cookie
 arg4 = switch,true,tag=七彩虹商城获取Cookie
 arg5 = switch,true,tag=健达福利社获取Cookie
 arg6 = switch,true,tag=AdGuard解锁Premium
+arg7 = switch,true,tag=EmbyPremiere解锁
 
 [Script]
 http-request ^https:\/\/cmallapi\.haday\.cn\/buyer-api\/members\/points\/current script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/htday/htcookie.js, timeout=60, enable = {arg1}, tag=海天美味馆Cookie
@@ -21,6 +22,8 @@ http-response ^https:\/\/instax\.app\.xcxd\.net\.cn\/api\/me$ script-path=https:
 http-request ^https:\/\/shop\.skycolorful\.com\/api\/User\/GetUserInfo$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Colorful/ColorfulCookie.js, requires-body=true, timeout=60, enable = {arg4}, tag=七彩虹商城Cookie
 http-response ^https:\/\/mole\.ferrero\.com\.cn\/boss\/(mp\/login\/taobao\/verify|boss\/hammond\/theme\/page\/get)$ script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/JDFLS/jdflsCookie.js, requires-body=true, enable = {arg5}, tag=健达福利社Cookie
 http-response ^https:\/\/mobile-api\.adguard\.org\/api\/.+\/ios_validate_receipt\/(.*?) script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/AdGuard/adguard.js, requires-body=true, enable = {arg6}, tag=AdGuard解锁Premium
+http-response ^https?:\/\/mb3admin.com\/admin script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Emby/embyScript.js, requires-body=true, timeout=10, enable = {arg7}, tag=EmbyPremiere
+http-response .*emby\/Plugins\/SecurityInfo script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Emby/embyScript.js, requires-body=true, timeout=10, enable = {arg7}, tag=EmbyPremiereSecurity
 
 [MITM]
-hostname = cmallapi.haday.cn, api.hzyxhfp.com, instax.app.xcxd.net.cn, shop.skycolorful.com, mole.ferrero.com.cn, mobile-api.adguard.org
+hostname = cmallapi.haday.cn, api.hzyxhfp.com, instax.app.xcxd.net.cn, shop.skycolorful.com, mole.ferrero.com.cn, mobile-api.adguard.org, mb3admin.com
