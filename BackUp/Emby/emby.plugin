@@ -1,0 +1,13 @@
+#!name=EmbyPremiere解锁
+#!desc=emby会员解锁
+#!author = Coke🅥
+#!homepage=https://github.com/IceCokei/myScripts
+#!date = 2024-11-24 10:07:01
+
+[Script]
+http-response ^https?:\/\/mb3admin.com\/admin script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Emby/embyScript.js, requires-body=true, timeout=10, tag=EmbyPremiere
+
+http-response .*emby\/Plugins\/SecurityInfo script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/Emby/embyScript.js, requires-body=true, timeout=10, tag=EmbyPremiereSecurity
+
+[MITM]
+hostname = mb3admin.com
