@@ -56,15 +56,17 @@ install_dependencies() {
 }
 
 random_port=$(( ( RANDOM % 64512 ) + 1024 ))
-token=$(cat /proc/sys/kernel/random/uuid)
 
 # 检测系统并设置路径
 if [ "$(uname)" = "Darwin" ]; then
     docker_data_path="$HOME/docker_data/frpc"
     echo "当前系统环境: macOS"
+    # 在 macOS 上使用 uuidgen 生成 token
+    token=$(uuidgen)
 else
     docker_data_path="/root/data/docker_data/frpc"
     echo "当前系统环境: $(uname)"
+    token=$(cat /proc/sys/kernel/random/uuid)
 fi
 
 install_dependencies
