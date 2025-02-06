@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 import pytz
 from datetime import datetime
+import telegram
 
 # 配置
 NODESEEK_URL = "https://www.nodeseek.com/categories/info"
@@ -168,11 +169,39 @@ def fetch_info_posts():
         logging.error(f"获取数据失败: {str(e)}")
         return []
 
-# 发送 Telegram 消息
-def send_telegram_message(bot_token, chat_id, message):
-    logging.info("发送 Telegram 消息...")
-    bot = Bot(token=bot_token)
-    bot.send_message(chat_id=chat_id, text=message, parse_mode='HTML')
+# 修改发送 Telegram 消息函数
+def send_telegram_message(bot_token, chat_id, message, title, post_id, history):
+    """
+    发送 Telegram 消息，并显示发送的帖子标题
+    :param title: 帖子标题，用于日志显示
+    :param post_id: 帖子ID，用于记录历史
+    :param history: 历史记录列表
+    :return: 是否发送成功
+    """
+    try:
+        logging.info(f"{EMOJI['SEND']} 正在发送帖子：{title}")
+        bot = Bot(token=bot_token)
+        try:
+            bot.send_message(chat_id=chat_id, text=message, parse_mode='HTML')
+        except telegram.error.BadRequest as e:
+            if "Group migrated to supergroup" in str(e):
+                # 从错误消息中提取新的群组ID
+                new_chat_id = str(e).split("New chat id: ")[1].strip()
+                logging.info(f"{EMOJI['INFO']} 群组已迁移，正在使用新ID重试: {new_chat_id}")
+                # 使用新的群组ID重试发送
+                bot.send_message(chat_id=new_chat_id, text=message, parse_mode='HTML')
+            else:
+                raise e
+        
+        time.sleep(3)  # 固定等待3秒，避免触发风控
+        logging.info(f"{EMOJI['SEND']} 发送成功：{title}")
+        # 发送成功后才将ID添加到历史记录
+        history.append(post_id)
+        save_history(history)
+        return True
+    except Exception as e:
+        logging.error(f"发送消息失败 ({title}): {str(e)}")
+        return False
 
 # 在 EMOJI 配置后添加时间转换函数
 def format_datetime(datetime_str):
@@ -206,9 +235,6 @@ def main():
         for post in posts:
             if post['id'] not in history:
                 new_posts.append(post)
-                history.append(post['id'])
-        
-        save_history(history)
         
         if new_posts:
             logging.info(f"发现 {len(new_posts)} 条新帖子")
@@ -218,9 +244,15 @@ def main():
                 message = (f"{EMOJI['NEW']} 监控到新帖子：\n\n"
                           f"<a href='{post['link']}'>{post['title']}</a>\n\n"
                           f"{EMOJI['TIME']} 发布时间: {formatted_time}")
-                send_telegram_message(TG_BOT_TOKEN, TG_CHAT_ID, message)
-                # 随机延迟0.5-2秒
-                time.sleep(random.uniform(0.5, 2))
+                # 发送消息并等待结果
+                send_telegram_message(
+                    TG_BOT_TOKEN, 
+                    TG_CHAT_ID, 
+                    message, 
+                    post['title'],
+                    post['id'],
+                    history
+                )
         else:
             logging.info("没有发现新帖子")
     
