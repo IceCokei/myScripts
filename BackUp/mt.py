@@ -38,16 +38,16 @@ class MiaoTanSign:
             'content-type': 'application/json',
             'apiCaller': 'wxxcx',
             'pname': 'minigame',
-            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvRVdkUjQwTHI4bTVBZGFnQWM0ZFR0a3pUcDZvIiwiYXBwaWQiOiJ3eDk4YmNkYjM4MTIzODYwOWIiLCJpc3MiOiJtb2JpbGUiLCJleHAiOjE3MzkwMjAxMDMsIm1waWQiOiJnaF9kOWIwODY5MWJkZTQifQ.Mn0tdrwLMeROVbdi_x_esj_zRzi4eEbJa2e8w-nA8xU',
+            'Authorization': '', #替换自己的token
             'X-Requested-With': 'XMLHttpRequest',
             'Tcsl-Shardingfield': 'group_code'
         }
         # 用户信息
         self.user_info = {
-            'mpId': 'gh_d9b08691bde4', #替换自己的mpId
-            'openId': 'oEWdR40Lr8m5AdagAc4dTtkzTp6o', #替换自己的openId
-            'unionId': 'objzM6u_5PGLnUkC3kic9ht8STQA', #替换自己的unionId
-            'memberId': '2716268056', #替换自己的memberId
+            'mpId': '', #替换自己的mpId
+            'openId': '', #替换自己的openId
+            'unionId': '', #替换自己的unionId
+            'memberId': '', #替换自己的memberId
             'gameId': '1000179065' # 固定不变
         }
         
