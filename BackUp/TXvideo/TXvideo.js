@@ -16,6 +16,21 @@
 
 ❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖
 
+⚙ 配置 (Surge)
+[MITM]
+hostname = vip.video.qq.com, pbaccess.video.qq.com
+
+[rewrite_local]
+https://vip.video.qq.com/rpc/trpc.new_task_system.task_system.TaskSystem/ReadTaskList? url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/TXvideo/TXvideo.js
+https://pbaccess.video.qq.com/trpc.videosearch.hot_rank.HotRankServantHttp/HotRankHttp url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/TXvideo/TXvideo.js
+https://pbaccess.video.qq.com/trpc.video_account_login.web_login_trpc.WebLoginTrpc/NewRefresh url script-request-body https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/TXvideo/TXvideo.js
+
+[rewrite_remote]
+https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/TXvideo/TXvideo_Cookie.conf, tag=腾讯视频, update-interval=172800, opt-parser=false, enabled=false
+
+[task_local]
+5 7 * * * https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/TXvideo/TXvideo.js, tag=腾讯视频, img-url=https://github.com/WowYiJiu/Personal/blob/main/icon/Color/tenvideo.png?raw=true, enabled=true
+
 */
 const $ = new Env("腾讯视频");
 
