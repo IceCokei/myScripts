@@ -268,6 +268,10 @@ async function waitRandom(min, max) {
     await $.wait(time);
 }
 
+// 不再发送通知
+function SendMsg() {
+}
+
 // 随机生成整数
 function getRandomInt(min, max) {
     min = Math.ceil(min);
