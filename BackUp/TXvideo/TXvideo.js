@@ -262,14 +262,13 @@ function getCookie() {
     }
 }
 
+function SendMsg() {
+    // 不再发送通知
+}
 
 async function waitRandom(min, max) {
     var time = getRandomInt(min, max);
     await $.wait(time);
-}
-
-// 不再发送通知
-function SendMsg() {
 }
 
 // 随机生成整数
