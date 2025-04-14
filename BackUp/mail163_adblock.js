@@ -59,4 +59,7 @@ function onResponse(context, flow) {
   }
 }
 
-module.exports = { onResponse };
+// 如果环境支持 module.exports，则导出 onResponse 函数；否则不做处理
+if (typeof module !== "undefined") {
+  module.exports = { onResponse };
+}
