@@ -1,17 +1,62 @@
 
 // 删除指定策略名称的条目
-let body = $response.body;
-const filterKeys = ["邮件追踪", "替身邮箱", "看广告扩容", "皮肤设置", "好运签"];
+const filterKeywords = ["邮件追踪", "替身邮箱", "看视频扩容", "皮肤设置", "好运签"];
 
-// 删除包含目标字段的完整对象（支持深层嵌套）
-body = body.replace(
-  new RegExp(`"strategyName":\\s*"(${filterKeys.join('|')})(?:-[^"]*)?"[^}]*}|` +
-             `"mainTitle":\\s*{"cn":\\s*"(${filterKeys.join('|')})"}`, 'g'),
-  ''
-);
+function parseJson(jsonStr) {
+  try {
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.error("JSON解析失败:", e);
+    return null;
+  }
+}
 
-// 清理残留的空对象和逗号（防止JSON格式错误）
-body = body.replace(/,\s*({}|""|\[\s*\])/g, '');
-body = body.replace(/,\s*([\]}])/g, '$1');
+function cleanObject(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
 
-$done({ body });
+  // 删除包含关键词的字段
+  if (
+    obj.strategyName &&
+    filterKeywords.some(keyword => obj.strategyName.includes(keyword))
+  ) {
+    return null;
+  }
+
+  if (
+    obj.mainTitle &&
+    obj.mainTitle.cn &&
+    filterKeywords.some(keyword => obj.mainTitle.cn.includes(keyword))
+  ) {
+    return null;
+  }
+
+  for (const key in obj) {
+    const value = cleanObject(obj[key]);
+    if (value === null) {
+      delete obj[key];
+    } else {
+      obj[key] = value;
+    }
+  }
+
+  return Object.keys(obj).length > 0 ? obj : null;
+}
+
+function onResponse(context, flow) {
+  if (flow.request.url.includes("/mailmaster/api/page/v2/conf.do")) {
+    const body = flow.response.body.toString();
+    let data = parseJson(body);
+
+    if (data) {
+      // 清理数据
+      data = cleanObject(data);
+
+      // 重新生成响应体
+      flow.response.body = Buffer.from(JSON.stringify(data));
+    }
+  }
+}
+
+module.exports = { onResponse };
