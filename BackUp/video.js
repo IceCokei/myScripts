@@ -1,25 +1,83 @@
 if (typeof $response !== "undefined") {
-  try {
-    const data = JSON.parse($response.body);
-    const videoInfo = data?.vl?.vi?.[0];
-    const videoName = videoInfo?.ti || '未知视频标题';
-    const vid = videoInfo?.vid || '';
-    const videoPageUrl = `https://v.qq.com/x/page/${vid}.html`;
+    try {
+        const data = JSON.parse($response.body);
+        const videoInfo = data?.vl?.vi?.[0];
+        const videoName = videoInfo?.ti || '未知视频标题';
+        const vid = videoInfo?.vid || '';
+        const videoPageUrl = `https://v.qq.com/x/page/${vid}.html`;
+        const apiURL = `https://oklink.cokei.me/video.php?url=${videoPageUrl}`;
 
-    const videoUrls = videoInfo?.ul?.ui?.map(u => u.url) || [];
-
-    let msg = `【腾讯视频解析】\n标题：${videoName}\nVID：${vid}\n\n`;
-    msg += `▶️ 点我打开：${videoPageUrl}\n`;
-
-    if (videoUrls.length > 0) {
-      msg += `\n【原始片段路径】\n${videoUrls[0]}`;
+        // Quantumult X 只支持 $task.fetch
+        if (typeof $task !== "undefined" && typeof $task.fetch === "function") {
+            $task.fetch({ url: apiURL }).then(
+                response => {
+                    let notifyMsg;
+                    try {
+                        const result = JSON.parse(response.body);
+                        const videoUrl = result?.video_url || result?.url || '获取失败';
+                        notifyMsg =
+                            `🎬【腾讯视频解析】\n` +
+                            `📺 标题：${videoName}\n` +
+                            `🆔 VID：${vid}\n\n` +
+                            `🔗 视频页：${videoPageUrl}\n\n` +
+                            `📥 视频地址：\n${videoUrl}`;
+                    } catch (e) {
+                        notifyMsg =
+                            `❌【腾讯视频解析失败】\n` +
+                            `📺 标题：${videoName}\n` +
+                            `🆔 VID：${vid}\n\n` +
+                            `🔗 视频页：${videoPageUrl}\n\n` +
+                            `⚠️ 错误：${e.message}`;
+                    }
+                    $notify("🎬 腾讯视频资源", videoName, notifyMsg);
+                    $done({});
+                },
+                reason => {
+                    const notifyMsg =
+                        `❌【腾讯视频解析失败】\n` +
+                        `📺 标题：${videoName}\n` +
+                        `🆔 VID：${vid}\n\n` +
+                        `🔗 视频页：${videoPageUrl}\n\n` +
+                        `⚠️ 错误：${reason.error || reason}`;
+                    $notify("🎬 腾讯视频资源", videoName, notifyMsg);
+                    $done({});
+                }
+            );
+        } else {
+            // 兼容 Surge
+            const http = typeof $httpClient !== "undefined" ? $httpClient : undefined;
+            if (http) {
+                http.get(apiURL, (error, response, body) => {
+                    let notifyMsg;
+                    if (!error && response.status === 200) {
+                        const result = JSON.parse(body);
+                        const videoUrl = result?.video_url || result?.url || '获取失败';
+                        notifyMsg =
+                            `🎬【腾讯视频解析】\n` +
+                            `📺 标题：${videoName}\n` +
+                            `🆔 VID：${vid}\n\n` +
+                            `🔗 视频页：${videoPageUrl}\n\n` +
+                            `📥 视频地址：\n${videoUrl}`;
+                    } else {
+                        notifyMsg =
+                            `❌【腾讯视频解析失败】\n` +
+                            `📺 标题：${videoName}\n` +
+                            `🆔 VID：${vid}\n\n` +
+                            `🔗 视频页：${videoPageUrl}\n\n` +
+                            `⚠️ 错误：${error || (response && response.status)}`;
+                    }
+                    $notify("🎬 腾讯视频资源", videoName, notifyMsg);
+                    $done({});
+                });
+            } else {
+                $notify("❌ 腾讯视频解析出错", "", "不支持的环境");
+                $done({});
+            }
+        }
+    } catch (e) {
+        $notify("❌ 腾讯视频解析出错", "", e.message);
+        $done({});
     }
-
-    $notify("腾讯视频资源", videoName, msg);
-  } catch (e) {
-    $notify("腾讯视频解析出错", "", e.message);
-  }
-  $done({});
 } else {
-  $done({});
+    $done({});
 }
