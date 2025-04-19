@@ -14,7 +14,12 @@ if (typeof $response !== "undefined") {
                     let notifyMsg;
                     try {
                         const result = JSON.parse(response.body);
-                        const videoUrl = result?.video_url || result?.url || '获取失败';
+                        let videoUrl = result?.video_url || result?.url || '获取失败';
+                        // 替换域名
+                        videoUrl = videoUrl.replace(
+                            /^https:\/\/apd-ugcvlive\.apdcdn\.tc\.qq\.com\/om\.tc\.qq\.com\//,
+                            'https://apd-vlive.apdcdn.tc.qq.com/om.tc.qq.com/'
+                        );
                         notifyMsg =
                             `🎬【腾讯视频解析】\n` +
                             `📺 标题：${videoName}\n` +
@@ -51,7 +56,12 @@ if (typeof $response !== "undefined") {
                     let notifyMsg;
                     if (!error && response.status === 200) {
                         const result = JSON.parse(body);
-                        const videoUrl = result?.video_url || result?.url || '获取失败';
+                        let videoUrl = result?.video_url || result?.url || '获取失败';
+                        // 替换域名
+                        videoUrl = videoUrl.replace(
+                            /^https:\/\/apd-ugcvlive\.apdcdn\.tc\.qq\.com\/om\.tc\.qq\.com\//,
+                            'https://apd-vlive.apdcdn.tc.qq.com/om.tc.qq.com/'
+                        );
                         notifyMsg =
                             `🎬【腾讯视频解析】\n` +
                             `📺 标题：${videoName}\n` +
