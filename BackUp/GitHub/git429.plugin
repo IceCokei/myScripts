@@ -1,0 +1,21 @@
+#!name=Github 429
+#!desc=解除 Github 429 限制 & GitHub 返回 429 Too Many Requests
+# 适配 Loon / Surge / Quantumult X
+
+[Script]
+# Quantumult X Header Rewrite (QuanX)
+rewrite_local=^https:\/\/(raw|gist)\.githubusercontent\.com\/ url request-header (\r\n)Accept-Language:.+(\r\n) request-header $1Accept-Language: en-us$2
+rewrite_local=^https:\/\/github\.com\/ url request-header (\r\n)Accept-Language:.+(\r\n) request-header $1Accept-Language: en-us$2
+
+[Header Rewrite]
+# Surge
+http-request ^https:\/\/github\.com\/ header-replace Accept-Language en-us
+http-request ^https:\/\/(raw|gist)\.githubusercontent\.com\/ header-replace Accept-Language en-us
+
+[Rewrite]
+# Loon
+^https:\/\/(raw|gist)\.githubusercontent\.com\/ header-replace Accept-Language en-us
+^https:\/\/github\.com\/ header-replace Accept-Language en-us
+
+[MITM]
+hostname = raw.githubusercontent.com, gist.githubusercontent.com, github.com
