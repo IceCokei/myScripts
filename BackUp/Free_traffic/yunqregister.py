@@ -7,7 +7,7 @@
 #      云桥机场自动注册脚本，支持自动发送邮箱验证码、注册账号并输出订阅链接。
 #      支持随机User-Agent，兼容多邮箱前缀自动拼接gmail.com。
 #      临时邮箱推荐：https://www.emailnator.com/，选择Gmail后获取邮箱前缀使用。「默认@gmail.com后缀的临时邮箱都可以」
-#      「预览图：」
+#      「预览图：https://github.com/IceCokei/myScripts/blob/main/BackUp/Free_traffic/%E4%BA%91%E6%A1%A5.png?raw=true」
 # ============================================================
 
 import requests
