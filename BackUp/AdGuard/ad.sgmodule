@@ -1,10 +1,11 @@
 # =========================
-# Coke 专属 Surge 广告去除规则合集
+# Module Name = CokeAdBlock
+# Module Desc = Coke 专属 Surge 广告去除规则合集，分区管理，便于维护与查找
 # 仅供个人学习与研究使用，禁止用于商业用途
 # 规则分区：每个APP单独分类，便于维护与查找
 # =========================
 
-[Rule]
+[Rewrite]
 # Kuaishou
 ^https:\/\/p2-lm\.adukwai\.com\/ url reject-dict
 ^https:\/\/v4-lm\.adukwai\.com\/bs2\/adUnionVideo url reject-dict
@@ -140,124 +141,6 @@
 # bridgeoos
 ^https:\/\/tk\.bridgeoos\.com url reject-dict
 
-[Host]
-# Kuaishou
-p2-lm.adukwai.com
-v4-lm.adukwai.com
-open.e.kuaishou.com
-p1-lm.adukwai.com
 
-# Toutiao/Douyin
-toblog.ctobsnssdk.com
-webcast-open.douyin.com
-api-access.pangolin-sdk-toutiao-b.com
-api-access.pangolin-sdk-toutiao.com
-api-access.pangolin-sdk-toutiao1.com
-www.pangolin-dsp-toutiao.com
-
-# Meituan
-s3plus.meituan.net
-dspadlogger.waimai.meituan.com
-p1.meituan.net
-p0.meituan.net
-
-# WeChat
-mp.weixin.qq.com
-
-# Twitter
-pbs.twimg.com
-
-# JD 京东
-m.360buyimg.com
-xlog.jd.com
-mktm.jd.com
-jingfen.jd.com
-api.m.jd.com
-
-# QQ/腾讯
-wxsmw.wxs.qq.com
-wximg.wxs.qq.com
-qzs.gdtimg.com
-win.gdt.qq.com
-v2mi.gdt.qq.com
-mi.gdt.qq.com
-
-# 1sapp
-show-api.1sapp.com
-
-# 1rtb
-sdk.1rtb.net
-cdn.1rtb.com
-
-# hubcloud
-v.adx.hubcloud.com.cn
-
-# beizi
-sdk.beizi.biz
-
-# wtzw
-api-cfg.wtzw.com
-
-# baidu
-mobads.baidu.com
-feed-image.baidu.com
-wn.pos.baidu.com
-
-# tanx
-sdk-config.tanx.com
-ef-dongfeng.tanx.com
-
-# qm989
-a6-remad.qm989.com
-
-# maplehaze
-ssp.maplehaze.cn
-
-# anythinktech
-adx-bj.anythinktech.com
-tk.anythinktech.com
-
-# pinduoduo
-t-dsp.pinduoduo.com
-
-# adwangmai
-sdk.adx.adwangmai.com
-
-# mail163
-appconf.mail.163.com
-
-# 10010
-m1.ad.10010.com
-
-# baidu-cdn
-mobads-pre-config.bj.bcebos.com
-
-# ubixioe
-tx-cfg-u1.ubixioe.com
-
-# taobao
-qh-material.taobao.com
-
-# 12306
-ad.12306.cn
-
-# halomobi
-bd-cdn.halomobi.com
-
-# qquanquan
-oss.cdn.qquanquan.com
-
-# gameley
-jp.ad.gameley.com
-
-# magicacid
-cdn3.magicacid.cn
-
-# sm.cn
-content-understand-strategy.sm.cn
-
-# lescar
-obs-lescar.obs.cn-north-1.myhuaweicloud.com
-
-# bridgeoos
-tk.bridgeoos.com
+[MITM]
+hostname = p2-lm.adukwai.com, v4-lm.adukwai.com, open.e.kuaishou.com, p1-lm.adukwai.com, toblog.ctobsnssdk.com, webcast-open.douyin.com, api-access.pangolin-sdk-toutiao-b.com, api-access.pangolin-sdk-toutiao.com, api-access.pangolin-sdk-toutiao1.com, www.pangolin-dsp-toutiao.com, s3plus.meituan.net, dspadlogger.waimai.meituan.com, p1.meituan.net, p0.meituan.net, mp.weixin.qq.com, pbs.twimg.com, m.360buyimg.com, xlog.jd.com, mktm.jd.com, jingfen.jd.com, api.m.jd.com, wxsmw.wxs.qq.com, wximg.wxs.qq.com, qzs.gdtimg.com, win.gdt.qq.com, v2mi.gdt.qq.com, mi.gdt.qq.com, show-api.1sapp.com, sdk.1rtb.net, cdn.1rtb.com, v.adx.hubcloud.com.cn, sdk.beizi.biz, api-cfg.wtzw.com, mobads.baidu.com, feed-image.baidu.com, wn.pos.baidu.com, sdk-config.tanx.com, ef-dongfeng.tanx.com, a6-remad.qm989.com, ssp.maplehaze.cn, adx-bj.anythinktech.com, tk.anythinktech.com, t-dsp.pinduoduo.com, sdk.adx.adwangmai.com, appconf.mail.163.com, m1.ad.10010.com, mobads-pre-config.bj.bcebos.com, tx-cfg-u1.ubixioe.com, qh-material.taobao.com, ad.12306.cn, bd-cdn.halomobi.com, oss.cdn.qquanquan.com, jp.ad.gameley.com, cdn3.magicacid.cn, content-understand-strategy.sm.cn, obs-lescar.obs.cn-north-1.myhuaweicloud.com, tk.bridgeoos.com
