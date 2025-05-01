@@ -1,0 +1,263 @@
+# =========================
+# Coke 专属 Surge 广告去除规则合集
+# 仅供个人学习与研究使用，禁止用于商业用途
+# 规则分区：每个APP单独分类，便于维护与查找
+# =========================
+
+[Rule]
+# Kuaishou
+^https:\/\/p2-lm\.adukwai\.com\/ url reject-dict
+^https:\/\/v4-lm\.adukwai\.com\/bs2\/adUnionVideo url reject-dict
+^https:\/\/open\.e\.kuaishou\.com\/rest url reject-dict
+^https:\/\/open\.e\.kuaishou\.com\/rest\/e\/v2\/open\/log\/conv\? url reject-dict
+^https:\/\/p2-lm\.adukwai\.com\/bs2\/adUnionVideo url reject-dict
+^https:\/\/p1-lm\.adukwai\.com\/bs2\/ url reject-dict
+
+# Toutiao/Douyin
+^https:\/\/toblog\.ctobsnssdk\.com url reject-dict
+^https:\/\/toblog\.ctobsnssdk\.com\/service url reject-dict
+^https:\/\/webcast-open\.douyin\.com\/webcast\/openapi\/ url reject-dict
+^https:\/\/api-access\.pangolin-sdk-toutiao-b\.com\/api\/ url reject-dict
+^https:\/\/api-access\.pangolin-sdk-toutiao\.com url reject-200
+^https:\/\/api-access\.pangolin-sdk-toutiao1\.com url reject-dict
+^https:\/\/www\.pangolin-dsp-toutiao\.com\/api\/ url reject-dict
+
+# Meituan
+^https:\/\/s3plus\.meituan\.net\/v1 url reject-200
+^https:\/\/dspadlogger\.waimai\.meituan\.com\/general\/imp\? url reject-dict
+^https:\/\/p1\.meituan\.net\/bizad\/giga_12751994 url reject-dict
+^https:\/\/p0\.meituan\.net\/bizad\/ url reject-dict
+
+# WeChat
+^https:\/\/mp\.weixin\.qq\.com\/mp\/mini_drama_info\? url reject-200
+^https:\/\/mp\.weixin\.qq\.com\/mp\/geticon\? url reject-dict
+
+# Twitter
+^https:\/\/pbs\.twimg\.com\/robots\.txt url reject-dict
+
+# JD 京东
+^https?:\/\/m\.360buyimg\.com\/mobilecms\/s1125x2436_jfs url reject-200
+^https:\/\/xlog\.jd\.com\/v1\/an url reject-dict
+^https:\/\/mktm\.jd\.com\/u\/impress\? url reject-dict
+^https:\/\/jingfen\.jd\.com\/item\? url reject
+^https?://api\.m\.jd\.com/(client\.action|api)\?functionId=(wareBusiness|serverConfig|basicConfig|lite_wareBusiness|pingou_item) url script-request-header https://raw.githubusercontent.com/Tartarus2014/Script/master/jdjf_price.js
+
+# QQ/腾讯
+^https:\/\/wxsmw\.wxs\.qq\.com\/131\/20210\/snssvpdownload\/ url reject-200
+^https:\/\/wxsmw\.wxs\.qq\.com\/131\/20210\/snssvpdownload\/SH\/reserved\/ads_svp_video__0b53dmbmiaacp4aox7e2nzrbqgyeyqnqfrca\.f142000\.mp4\? url reject-dict
+^https:\/\/wximg\.wxs\.qq\.com\/141\/20204\/snscosdownload\/SZ\/reserved\/ url reject-dict
+^https:\/\/qzs\.gdtimg\.com\/union\/res\/union_site\/ url reject-dict
+^https:\/\/win\.gdt\.qq\.com\/win_notice\.fcg\? url reject-200
+^https:\/\/v2mi\.gdt\.qq\.com\/gdt_mview\.fcg url reject-dict
+^https:\/\/v2mi\.gdt\.qq\.com\/ url reject-200
+^https:\/\/mi\.gdt\.qq\.com\/gdt_mview\.fcg url reject-200
+
+# 1sapp
+^https:\/\/show-api\.1sapp\.com\/report\/v1 url reject-dict
+
+# 1rtb
+^http:\/\/sdk\.1rtb\.net\/sdk url reject-dict
+^http:\/\/sdk\.1rtb\.net\/sdk\/notice\? url reject-dict
+^https:\/\/cdn\.1rtb\.com\/sources\/ url reject-dict
+
+# hubcloud
+^http:\/\/v\.adx\.hubcloud\.com\.cn\/adx\/m\/view\/v1\? url reject-dict
+
+# beizi
+^http:\/\/sdk\.beizi\.biz\/v1\/api\/sdk\/log\/p url reject-dict
+
+# wtzw
+^https:\/\/api-cfg\.wtzw\.com\/v1\/splash\/index\? url reject-dict
+^https:\/\/api-cfg\.wtzw\.com\/v1\/ url reject-200
+
+# baidu
+^https:\/\/mobads\.baidu\.com\/cpro\/ui\/mads\.php\? url reject-200
+^https:\/\/feed-image\.baidu\.com url reject-200
+^https:\/\/wn\.pos\.baidu\.com url reject-dict
+
+# tanx
+^https:\/\/sdk-config\.tanx\.com\/requestConfigV2\? url reject-dict
+^https:\/\/ef-dongfeng\.tanx\.com url reject-dict
+
+# qm989
+^https:\/\/a6-remad\.qm989\.com\/v3\/ url reject-dict
+
+# maplehaze
+^https:\/\/ssp\.maplehaze\.cn\/ url reject-dict
+
+# anythinktech
+^https:\/\/adx-bj\.anythinktech\.com -url reject-dict
+^https:\/\/adx-bj\.anythinktech\.com\/bid url reject-dict
+^https:\/\/tk\.anythinktech\.com\/v1\/ url reject-dict
+
+# pinduoduo
+^https:\/\/t-dsp\.pinduoduo\.com\/dspcb\/i\/mrk_union\? url reject-dict
+
+# adwangmai
+^https:\/\/sdk\.adx\.adwangmai\.com\/sdk\/app\/mc\.api url reject-dict
+
+# 10010
+^https:\/\/m1\.ad\.10010\.com\/uniAdms_3\.0\/ url reject-dict
+
+# meituan
+^https:\/\/dspadlogger\.waimai\.meituan\.com\/general\/imp\? url reject-dict
+
+# pangolin
+^https:\/\/api-access\.pangolin-sdk-toutiao-b\.com\/api\/ url reject-dict
+
+# baidu-cdn
+^https:\/\/mobads-pre-config\.bj\.bcebos\.com url reject-200
+
+# ubixioe
+^https:\/\/tx-cfg-u1\.ubixioe\.com\/mob\/sdk\/ url reject-200
+
+# taobao
+^https:\/\/qh-material\.taobao\.com\/ url reject-dict
+
+# 12306
+^https:\/\/ad\.12306\.cn\/ad\/ url reject-200
+^https:\/\/ad\.12306\.cn\/ad\/mon\/mzc\? url reject-200
+
+# halomobi
+^https:\/\/bd-cdn\.halomobi\.com\/csp\/ url reject-dict
+
+# qquanquan
+^https:\/\/oss\.cdn\.qquanquan\.com\/ url reject-dict
+^https:\/\/oss\.cdn\.qquanquan\.com\/customer\/ url reject-200
+
+# gameley
+^https:\/\/jp\.ad\.gameley\.com\/stat\/ikanstat\/adnlog url reject-dict
+
+# magicacid
+^https:\/\/cdn3\.magicacid\.cn\/dsp\/ url reject-dict
+
+# sm.cn
+^https:\/\/content-understand-strategy\.sm\.cn\/open_screen_image\/ url reject-dict
+
+# lescar
+^https:\/\/obs-lescar\.obs\.cn-north-1\.myhuaweicloud\.com\/ url reject-dict
+
+# bridgeoos
+^https:\/\/tk\.bridgeoos\.com url reject-dict
+
+[Host]
+# Kuaishou
+p2-lm.adukwai.com
+v4-lm.adukwai.com
+open.e.kuaishou.com
+p1-lm.adukwai.com
+
+# Toutiao/Douyin
+toblog.ctobsnssdk.com
+webcast-open.douyin.com
+api-access.pangolin-sdk-toutiao-b.com
+api-access.pangolin-sdk-toutiao.com
+api-access.pangolin-sdk-toutiao1.com
+www.pangolin-dsp-toutiao.com
+
+# Meituan
+s3plus.meituan.net
+dspadlogger.waimai.meituan.com
+p1.meituan.net
+p0.meituan.net
+
+# WeChat
+mp.weixin.qq.com
+
+# Twitter
+pbs.twimg.com
+
+# JD 京东
+m.360buyimg.com
+xlog.jd.com
+mktm.jd.com
+jingfen.jd.com
+api.m.jd.com
+
+# QQ/腾讯
+wxsmw.wxs.qq.com
+wximg.wxs.qq.com
+qzs.gdtimg.com
+win.gdt.qq.com
+v2mi.gdt.qq.com
+mi.gdt.qq.com
+
+# 1sapp
+show-api.1sapp.com
+
+# 1rtb
+sdk.1rtb.net
+cdn.1rtb.com
+
+# hubcloud
+v.adx.hubcloud.com.cn
+
+# beizi
+sdk.beizi.biz
+
+# wtzw
+api-cfg.wtzw.com
+
+# baidu
+mobads.baidu.com
+feed-image.baidu.com
+wn.pos.baidu.com
+
+# tanx
+sdk-config.tanx.com
+ef-dongfeng.tanx.com
+
+# qm989
+a6-remad.qm989.com
+
+# maplehaze
+ssp.maplehaze.cn
+
+# anythinktech
+adx-bj.anythinktech.com
+tk.anythinktech.com
+
+# pinduoduo
+t-dsp.pinduoduo.com
+
+# adwangmai
+sdk.adx.adwangmai.com
+
+# mail163
+appconf.mail.163.com
+
+# 10010
+m1.ad.10010.com
+
+# baidu-cdn
+mobads-pre-config.bj.bcebos.com
+
+# ubixioe
+tx-cfg-u1.ubixioe.com
+
+# taobao
+qh-material.taobao.com
+
+# 12306
+ad.12306.cn
+
+# halomobi
+bd-cdn.halomobi.com
+
+# qquanquan
+oss.cdn.qquanquan.com
+
+# gameley
+jp.ad.gameley.com
+
+# magicacid
+cdn3.magicacid.cn
+
+# sm.cn
+content-understand-strategy.sm.cn
+
+# lescar
+obs-lescar.obs.cn-north-1.myhuaweicloud.com
+
+# bridgeoos
+tk.bridgeoos.com
