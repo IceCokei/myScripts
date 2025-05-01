@@ -30,9 +30,6 @@ DOMAIN,p0.meituan.net,REJECT,extended-matching,pre-matching
 #>微信
 DOMAIN,mp.weixin.qq.com,REJECT,extended-matching,pre-matching
 
-#>Twitter
-DOMAIN,pbs.twimg.com,REJECT,extended-matching,pre-matching
-
 #>QQ/腾讯
 DOMAIN,wxsmw.wxs.qq.com,REJECT,extended-matching,pre-matching
 DOMAIN,wximg.wxs.qq.com,REJECT,extended-matching,pre-matching
