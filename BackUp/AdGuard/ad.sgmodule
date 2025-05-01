@@ -33,13 +33,6 @@ DOMAIN,mp.weixin.qq.com,REJECT,extended-matching,pre-matching
 #>Twitter
 DOMAIN,pbs.twimg.com,REJECT,extended-matching,pre-matching
 
-#>京东
-DOMAIN,m.360buyimg.com,REJECT,extended-matching,pre-matching
-DOMAIN,xlog.jd.com,REJECT,extended-matching,pre-matching
-DOMAIN,mktm.jd.com,REJECT,extended-matching,pre-matching
-DOMAIN,jingfen.jd.com,REJECT,extended-matching,pre-matching
-DOMAIN,api.m.jd.com,REJECT,extended-matching,pre-matching
-
 #>QQ/腾讯
 DOMAIN,wxsmw.wxs.qq.com,REJECT,extended-matching,pre-matching
 DOMAIN,wximg.wxs.qq.com,REJECT,extended-matching,pre-matching
