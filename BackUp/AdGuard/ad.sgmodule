@@ -146,8 +146,11 @@ DOMAIN,tk.bridgeoos.com,REJECT,extended-matching,pre-matching
 ^https:\/\/mp\.weixin\.qq\.com\/mp\/geticon\? - reject-dict
 
 # Twitter
-^https:\/\/pbs\.twimg\.com\/robots\.txt - reject-dict
-^https:\/\/pbs\.twimg\.com\/amplify_video_thumb.* - reject-img
+^https:\/\/video\.twimg\.com\/robots\.txt - reject-dict
+^https:\/\/video\.twimg\.com\/amplify_video\/1923205176426463232 - reject-dict
+^https:\/\/pbs\.twimg\.com\/media\/GYm9PJZXwAA26_6\? - reject-dict
+^https:\/\/video\.twimg\.com\/amplify_video\/1923176793911197696 - reject-dict
+^https:\/\/pbs\.twimg\.com\/card_img\/1920891286300622848 - reject-img
 
 # 京东
 ^https?:\/\/m\.360buyimg\.com\/mobilecms\/s1125x2436_jfs - reject-200
@@ -722,4 +725,4 @@ http-response-jq ^https:\/\/xiaoshuo\.wtzw\.com\/api\/v\d\/user\/my-center\? 'de
 http-response-jq ^https:\/\/xiaoshuo\.wtzw\.com\/api\/v\d\/user\/my-center\? 'delpaths([["data","func_area",2]])'
 
 [MITM]
-hostname = p2-lm.adukwai.com, v4-lm.adukwai.com, open.e.kuaishou.com, p1-lm.adukwai.com, toblog.ctobsnssdk.com, webcast-open.douyin.com, api-access.pangolin-sdk-toutiao-b.com, api-access.pangolin-sdk-toutiao.com, api-access.pangolin-sdk-toutiao1.com, www.pangolin-dsp-toutiao.com, s3plus.meituan.net, dspadlogger.waimai.meituan.com, p1.meituan.net, p0.meituan.net, mp.weixin.qq.com, pbs.twimg.com, m.360buyimg.com, xlog.jd.com, mktm.jd.com, jingfen.jd.com, api.m.jd.com, wxsmw.wxs.qq.com, wximg.wxs.qq.com, qzs.gdtimg.com, win.gdt.qq.com, v2mi.gdt.qq.com, mi.gdt.qq.com, show-api.1sapp.com, sdk.1rtb.net, cdn.1rtb.com, v.adx.hubcloud.com.cn, sdk.beizi.biz, api-cfg.wtzw.com, mobads.baidu.com, feed-image.baidu.com, wn.pos.baidu.com, sdk-config.tanx.com, ef-dongfeng.tanx.com, a6-remad.qm989.com, ssp.maplehaze.cn, adx-bj.anythinktech.com, tk.anythinktech.com, t-dsp.pinduoduo.com, sdk.adx.adwangmai.com, appconf.mail.163.com, m1.ad.10010.com, mobads-pre-config.bj.bcebos.com, tx-cfg-u1.ubixioe.com, qh-material.taobao.com, ad.12306.cn, bd-cdn.halomobi.com, oss.cdn.qquanquan.com, jp.ad.gameley.com, cdn3.magicacid.cn, content-understand-strategy.sm.cn, obs-lescar.obs.cn-north-1.myhuaweicloud.com, tk.bridgeoos.com, webapi.qmai.cn, cdn-ad.wtzw.com, cdn-new-ad.wtzw.com, api-bc.wtzw.com, api-gw.wtzw.com, cdn.wtzw.com, sf3-fe-tos.pglstatp-toutiao.com, xiaoshuo.wtzw.com
+hostname = p2-lm.adukwai.com, v4-lm.adukwai.com, open.e.kuaishou.com, p1-lm.adukwai.com, toblog.ctobsnssdk.com, webcast-open.douyin.com, api-access.pangolin-sdk-toutiao-b.com, api-access.pangolin-sdk-toutiao.com, api-access.pangolin-sdk-toutiao1.com, www.pangolin-dsp-toutiao.com, s3plus.meituan.net, dspadlogger.waimai.meituan.com, p1.meituan.net, p0.meituan.net, mp.weixin.qq.com, pbs.twimg.com, video.twimg.com, m.360buyimg.com, xlog.jd.com, mktm.jd.com, jingfen.jd.com, api.m.jd.com, wxsmw.wxs.qq.com, wximg.wxs.qq.com, qzs.gdtimg.com, win.gdt.qq.com, v2mi.gdt.qq.com, mi.gdt.qq.com, show-api.1sapp.com, sdk.1rtb.net, cdn.1rtb.com, v.adx.hubcloud.com.cn, sdk.beizi.biz, api-cfg.wtzw.com, mobads.baidu.com, feed-image.baidu.com, wn.pos.baidu.com, sdk-config.tanx.com, ef-dongfeng.tanx.com, a6-remad.qm989.com, ssp.maplehaze.cn, adx-bj.anythinktech.com, tk.anythinktech.com, t-dsp.pinduoduo.com, sdk.adx.adwangmai.com, appconf.mail.163.com, m1.ad.10010.com, mobads-pre-config.bj.bcebos.com, tx-cfg-u1.ubixioe.com, qh-material.taobao.com, ad.12306.cn, bd-cdn.halomobi.com, oss.cdn.qquanquan.com, jp.ad.gameley.com, cdn3.magicacid.cn, content-understand-strategy.sm.cn, obs-lescar.obs.cn-north-1.myhuaweicloud.com, tk.bridgeoos.com, webapi.qmai.cn, cdn-ad.wtzw.com, cdn-new-ad.wtzw.com, api-bc.wtzw.com, api-gw.wtzw.com, cdn.wtzw.com, sf3-fe-tos.pglstatp-toutiao.com, xiaoshuo.wtzw.com
