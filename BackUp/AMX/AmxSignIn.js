@@ -9,7 +9,7 @@
  * 支持平台：Quantumult X, Loon, Surge
  * 
  * 作者: IceCokei
- * 更新: 2025-05-15
+ * 更新: 2025-05-16
  */
 
 // 跨平台兼容处理
@@ -31,10 +31,11 @@ if (isTokenExtraction) {
         return;
     }
 
-    const token = obj.token;
+    // 尝试从不同位置获取 token
+    const token = obj.token || obj.data?.token || obj.result?.token || "";
 
     if (!token) {
-        $.log("❌ 未获取到 Token");
+        $.log("❌ 未获取到 Token，响应内容：" + body);
         $.msg("❌ 伊利 Token", "提取失败", "未找到 token 字段");
         $.done({});
         return;
@@ -119,25 +120,77 @@ if (isTokenExtraction) {
 async function processAccounts(tokenList) {
     // 当前处理的账号索引
     let currentIndex = 0;
+    // 记录失效的 token 索引
+    let invalidTokens = [];
 
     // 处理下一个账号
     function processNext() {
         if (currentIndex < tokenList.length) {
             const accountInfo = tokenList[currentIndex];
             $.log(`\n⭐ 开始处理账号 ${currentIndex + 1}`);
-            processAccount(accountInfo.token, currentIndex + 1, () => {
+            processAccount(accountInfo.token, currentIndex + 1, (isValid) => {
+                if (!isValid) {
+                    // 记录失效的 token 索引
+                    invalidTokens.push(currentIndex);
+                }
                 currentIndex++;
                 processNext();
             });
         } else {
-            // 所有账号处理完毕
-            $.log("\n✅ 所有账号处理完毕");
-            $.done();
+            // 所有账号处理完毕，清理失效的 token
+            if (invalidTokens.length > 0) {
+                cleanInvalidTokens(invalidTokens);
+            } else {
+                $.log("\n✅ 所有账号处理完毕");
+                $.done();
+            }
         }
     }
 
     // 开始处理第一个账号
     processNext();
+}
+
+// 清理失效的 token
+function cleanInvalidTokens(invalidIndices) {
+    // 获取当前的 token 列表
+    let tokens = $.getdata("Yili_tokens");
+    let tokenList = [];
+
+    try {
+        if (tokens) {
+            tokenList = JSON.parse(tokens);
+            if (!Array.isArray(tokenList)) tokenList = [];
+        }
+    } catch (e) {
+        tokenList = [];
+    }
+
+    // 按索引从大到小排序，以便从后向前删除
+    invalidIndices.sort((a, b) => b - a);
+
+    // 删除失效的 token
+    for (const index of invalidIndices) {
+        if (index >= 0 && index < tokenList.length) {
+            const removedToken = tokenList[index];
+            $.log(`🗑️ 删除失效的账号 ${index + 1}: ${removedToken.token.substring(0, 10)}...`);
+            tokenList.splice(index, 1);
+        }
+    }
+
+    // 保存更新后的 token 列表
+    $.setdata(JSON.stringify(tokenList), "Yili_tokens");
+
+    // 如果还有有效的 token，更新单个 token 存储
+    if (tokenList.length > 0) {
+        $.setdata(tokenList[0].token, "Yili_token");
+    } else {
+        // 如果没有有效的 token，清除单个 token 存储
+        $.setdata("", "Yili_token");
+    }
+
+    $.log(`\n✅ 清理完成，剩余 ${tokenList.length} 个有效账号`);
+    $.done();
 }
 
 // 处理单个账号
@@ -176,6 +229,15 @@ function processAccount(token, accountIndex, callback) {
             let lotteryHistory;
             try {
                 lotteryHistory = JSON.parse(response.body);
+
+                // 检查 token 是否失效
+                if (lotteryHistory.code === -100) {
+                    $.log(`❌ 账号${accountIndex} Token 失效，将被删除`);
+                    $.msg(`❌ 伊利账号${accountIndex}`, "Token 失效", "该账号将被移除");
+                    callback(false); // 标记为无效
+                    return;
+                }
+
             } catch (e) {
                 $.log(`⚠️ 账号${accountIndex} 解析抽奖记录失败`);
                 signIn(false, null);
@@ -221,14 +283,14 @@ function processAccount(token, accountIndex, callback) {
                 signInData = JSON.parse(response.body);
             } catch (e) {
                 $.log(`⚠️ 账号${accountIndex} 解析签到结果失败`);
-                callback();
+                callback(true); // 默认为有效
                 return;
             }
 
             if (signInData.code === -100) {
-                $.log(`❌ 账号${accountIndex} Token 失效，请更新`);
-                $.msg(`❌ 伊利账号${accountIndex}`, "签到失败", "Token 无效，请重新登录获取");
-                callback(); // 处理下一个账号
+                $.log(`❌ 账号${accountIndex} Token 失效，将被删除`);
+                $.msg(`❌ 伊利账号${accountIndex}`, "签到失败", "Token 无效，该账号将被移除");
+                callback(false); // 标记为无效
                 return;
             }
 
@@ -242,14 +304,14 @@ function processAccount(token, accountIndex, callback) {
                 // 如果已经抽过奖，显示今日奖品信息
                 $.log(`🎁 账号${accountIndex} 今日已抽奖 - 奖品: ${todayPrize.luckName}`);
                 $.msg(`🎁 伊利账号${accountIndex}`, "今日已抽奖", `奖品: ${todayPrize.luckName}`);
-                callback(); // 处理下一个账号
+                callback(true); // 标记为有效
             } else {
-                callback(); // 处理下一个账号
+                callback(true); // 标记为有效
             }
         }, error => {
             $.log(`⚠️ 账号${accountIndex} 签到请求失败: ${error}`);
             $.msg(`❌ 伊利账号${accountIndex}`, "签到失败", `网络错误: ${error}`);
-            callback(); // 处理下一个账号
+            callback(true); // 网络错误不代表 token 失效
         });
     }
 
@@ -265,9 +327,18 @@ function processAccount(token, accountIndex, callback) {
             let lotteryData;
             try {
                 lotteryData = JSON.parse(response.body);
+
+                // 检查 token 是否失效
+                if (lotteryData.code === -100) {
+                    $.log(`❌ 账号${accountIndex} Token 失效，将被删除`);
+                    $.msg(`❌ 伊利账号${accountIndex}`, "抽奖失败", "Token 无效，该账号将被移除");
+                    callback(false); // 标记为无效
+                    return;
+                }
+
             } catch (e) {
                 $.log(`⚠️ 账号${accountIndex} 解析抽奖结果失败`);
-                callback();
+                callback(true); // 默认为有效
                 return;
             }
 
@@ -277,11 +348,11 @@ function processAccount(token, accountIndex, callback) {
             $.log(`🎉 账号${accountIndex} 伊利抽奖成功 - 奖品: ${prize.luckname || "未知奖品"}, 数量: ${prize.qty || 0}, 概率: ${prize.percentage || "?"}`);
 
             $.msg(`🎁 伊利账号${accountIndex}`, prize.luckname || "未知奖品", `数量: ${prize.qty || 0}, 概率: ${prize.percentage || "?"}`);
-            callback(); // 处理下一个账号
+            callback(true); // 标记为有效
         }, error => {
             $.log(`⚠️ 账号${accountIndex} 抽奖请求失败: ${error}`);
             $.msg(`❌ 伊利账号${accountIndex}`, "抽奖失败", `网络错误: ${error}`);
-            callback(); // 处理下一个账号
+            callback(true); // 网络错误不代表 token 失效
         });
     }
 
