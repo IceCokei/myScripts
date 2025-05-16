@@ -1,8 +1,8 @@
 #!name=Twitter 去广告规则
-#!desc=loon 去广告规则
+#!desc=Loon 专用 Twitter 去广告规则
 #!author = Coke🅥
 #!date = 2025-05-16 06:12:01
-
+#!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/AdGuard/x.png
 
 [Rewrite]
 ^https:\/\/video\.twimg\.com\/robots\.txt reject-dict
@@ -13,4 +13,4 @@
 
 
 [MITM]
-hostname = video.twimg.com, pbs.twimg.com
+hostname = video.twimg.com, pbs.twimg.com 
