@@ -147,6 +147,7 @@ DOMAIN,tk.bridgeoos.com,REJECT,extended-matching,pre-matching
 
 # Twitter
 ^https:\/\/pbs\.twimg\.com\/robots\.txt - reject-dict
+^https:\/\/pbs\.twimg\.com\/amplify_video_thumb.* - reject-img
 
 # 京东
 ^https?:\/\/m\.360buyimg\.com\/mobilecms\/s1125x2436_jfs - reject-200
