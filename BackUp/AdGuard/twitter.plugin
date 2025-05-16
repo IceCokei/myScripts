@@ -1,0 +1,16 @@
+#!name=Twitter 去广告规则
+#!desc=loon 去广告规则
+#!author = Coke🅥
+#!date = 2025-05-16 06:12:01
+
+
+[Rewrite]
+^https:\/\/video\.twimg\.com\/robots\.txt reject-dict
+^https:\/\/video\.twimg\.com\/amplify_video\/1923205176426463232 reject-dict
+^https:\/\/pbs\.twimg\.com\/media\/GYm9PJZXwAA26_6\? reject-dict
+^https:\/\/video\.twimg\.com\/amplify_video\/1923176793911197696 reject-dict
+^https:\/\/pbs\.twimg\.com\/card_img\/1920891286300622848 reject-img
+
+
+[MITM]
+hostname = *.twitter.com, *.twimg.com, twitter.com, twimg.com, pbs.twimg.com, video.twimg.com
