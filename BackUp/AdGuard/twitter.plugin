@@ -13,4 +13,4 @@
 
 
 [MITM]
-hostname = *.twitter.com, *.twimg.com, twitter.com, twimg.com, pbs.twimg.com, video.twimg.com
+hostname = video.twimg.com, pbs.twimg.com
