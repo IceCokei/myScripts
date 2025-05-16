@@ -1,7 +1,7 @@
 #!name=Twitter 去广告规则
 #!desc=Loon 专用 Twitter 去广告规则
 #!author = Coke🅥
-#!date = 2025-05-16 22:19:01
+#!date = 2025-05-16 06:12:01
 #!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/AdGuard/x.png
 
 [Rewrite]
@@ -10,7 +10,15 @@
 ^https:\/\/pbs\.twimg\.com\/media\/GYm9PJZXwAA26_6\? reject-dict
 ^https:\/\/video\.twimg\.com\/amplify_video\/1923176793911197696 reject-dict
 ^https:\/\/pbs\.twimg\.com\/card_img\/1920891286300622848 reject-img
+^https:\/\/video\.twimg\.com\/amplify_video\/1903954582872432640 reject-dict
+^https:\/\/pbs\.twimg\.com\/amplify_video_thumb\/1903954582872432640 reject-dict
+^https:\/\/pbs\.twimg\.com\/amplify_video_thumb\/1903954582872432640\/img reject-dict
+^https:\/\/pbs\.twimg\.com\/media\/GrDjXWfaAAA2Eoa\? reject-dict
+^https:\/\/abs\.twimg\.com\/ reject-dict
+^https:\/\/pbs\.twimg\.com\/media\/GqUuDKPbAAUZYPk\? reject-dict
 
+[Rule]
+DOMAIN-SUFFIX,analytics.twitter.com,REJECT
 
 [MITM]
-hostname = video.twimg.com, pbs.twimg.com 
+hostname = video.twimg.com, pbs.twimg.com, abs.twimg.com 
