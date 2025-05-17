@@ -1,0 +1,17 @@
+#!name=植白说每日签到
+#!desc=植白说小程序自动签到，支持多账号，抓包自动获取 token。
+#!author=IceCokei
+#!version=1.5
+#!date=2025-05-17 11:09
+#!homepage=https://github.com/IceCokei/myScripts
+#!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbssc.png
+
+[Script]
+cron "15 9 * * *" script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js, tag=植白说签到
+
+[Rewrite]
+^https:\/\/www\.kozbs\.com\/demo\/wx\/user\/getUserIntegral url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js
+^https:\/\/www\.kozbs\.com\/demo\/wx\/home\/sign url script-request-header https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js
+
+[Mitm]
+hostname = www.kozbs.com
