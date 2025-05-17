@@ -2,7 +2,7 @@
 #!desc=植白说小程序自动签到，支持多账号，抓包自动获取 token。
 #!author = Coke🅥
 #!version=1.5
-#!date=2025-05-17 11:19:28
+#!date=2025-05-17 12:01:15
 #!homepage=https://github.com/IceCokei/myScripts
 #!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbssc.png
 
@@ -10,8 +10,7 @@
 cron "15 9 * * *" script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js, tag=植白说签到
 
 # 获取Token
-http-response ^https:\/\/www\.kozbs\.com\/demo\/wx\/user\/info script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js, requires-body=true, timeout=10, tag=植白说Token获取
-
+http-request ^https:\/\/www\.kozbs\.com\/demo\/wx\/user\/getUserIntegral script-path=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js, timeout=10, tag=植白说Token获取
 
 [Mitm]
 hostname = www.kozbs.com
