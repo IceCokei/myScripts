@@ -1,8 +1,8 @@
 #!name=植白说每日签到
 #!desc=植白说小程序自动签到，支持多账号，抓包自动获取 token。
-#!author=IceCokei
+#!author = Coke🅥
 #!version=1.5
-#!date=2025-05-17 11:09
+#!date=2025-05-17 11:05:33
 #!homepage=https://github.com/IceCokei/myScripts
 #!icon=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbssc.png
 
