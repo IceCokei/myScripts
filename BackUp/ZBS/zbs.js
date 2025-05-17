@@ -2,8 +2,7 @@
 token 抓取及签到脚本
 
 [rewrite_local]
-^https:\/\/www\.kozbs\.com\/demo\/wx\/user\/getUserIntegral url script-request-header=zbs.js
-^https:\/\/www\.kozbs\.com\/demo\/wx\/home\/sign url script-request-header=zbs.js
+^https:\/\/www\.kozbs\.com\/demo\/wx\/user\/getUserIntegral url script-request-header=https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/BackUp/ZBS/zbs.js
 
 [task_local]
 15 9 * * * zbs.js, tag=植白说签到, enabled=true
@@ -22,14 +21,24 @@ if (isRequest) {
     // 抓取 token 逻辑
     if ($request && $request.headers) {
         const token = $request.headers['X-Dts-Token'] || $request.headers['x-dts-token'];
+        $.log(`提取的token: ${token}`);
+        const savedTokens = $.getdata('KOZBS_TOKEN') || '';
+        $.log(`当前已保存的tokens: ${savedTokens}`);
         if (token) {
             let tokens = $.getdata('KOZBS_TOKEN') || '';
             if (!tokens.includes(token)) {
                 tokens = tokens ? tokens + '\n' + token : token;
                 $.setdata(tokens, 'KOZBS_TOKEN');
                 $.msg('植白说', '🎉 恭喜您', '获取 KOZBS_TOKEN 成功');
+            } else {
+                $.log('Token已存在，无需重复保存');
+                $.msg('植白说', '✅ Token已存在', `当前Token: ${token.substring(0, 10)}...`);
             }
+        } else {
+            $.log('未找到token，请检查请求头');
         }
+    } else {
+        $.log('未获取到请求头信息');
     }
     $.done({});
 } else {
@@ -76,9 +85,9 @@ if (isRequest) {
                 // 检查签到状态并签到
                 const signResult = await signDay(baseUrl, currentToken);
                 if (signResult.success) {
-                    message += `🎉 ${signResult.message}\n`;
+                    message += `\n✅ ${signResult.message}\n\n`;
                 } else {
-                    message += `❌ ${signResult.message}\n`;
+                    message += `❌ ${signResult.message}\n\n`;
                 }
             }
 
