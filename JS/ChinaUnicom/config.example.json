@@ -1,0 +1,32 @@
+{
+  "accounts": [
+    {
+      "phone": "手机号",
+      "ecs_token": "你的ecs_token（推荐使用这个）",
+      "token_online": "你的token_online（可选）",
+      "appId": "你的appId（可选）"
+    }
+  ],
+  "_comment": "配置说明",
+  "_usage": {
+    "方式1": "只填写 phone 和 ecs_token（推荐）",
+    "方式2": "填写 phone、token_online 和 appId",
+    "多账号": "在 accounts 数组中添加多个账号对象"
+  },
+  "_example": {
+    "accounts": [
+      {
+        "phone": "13800138000",
+        "ecs_token": "eyJkYXRhIjoiLi4uIiwidmVyc2lvbiI6IjAwIn0=",
+        "token_online": "",
+        "appId": ""
+      },
+      {
+        "phone": "13900139000",
+        "ecs_token": "",
+        "token_online": "cffb554725f0f0badd24f5efeae21dd5...",
+        "appId": "edop_unicom_c43eac06"
+      }
+    ]
+  }
+}
