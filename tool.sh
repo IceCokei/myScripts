@@ -54,6 +54,11 @@ function display_utility_menu {
     echo "5. 网络测速"
     echo "6. IP质量体检"
     echo "7. 设置ROOT密码"
+    echo "8. SSL证书申请"
+    echo "9. TCP调优"
+    echo "10. Gost转发"
+    echo "11. 融合怪VPS测评"
+    echo "12. DD重装系统"
     echo "0. 返回"
 }
 
@@ -68,11 +73,11 @@ function display_docker_menu {
 
 function display_panel_menu {
     clear
-    echo "青龙面板管理"
+    echo "常用面板管理"
     echo "1. 安装青龙 2.10.12版本"
-    # echo "2. 安装青龙 latest 版本"
-    # echo "3. 卸载青龙"
-    # echo "4. 查看青龙面板"
+    echo "2. 安装V2bX后端面板"
+    echo "3. 一键替换V2bX证书路径"
+    echo "4. 安装宝塔面板"
     echo "0. 返回上一级"
 }
 
@@ -222,12 +227,126 @@ case $choice in
                     6)
                         clear
                         echo "IP质量体检"
-                        # IP质量体检命令
-                        bash <(curl -sL IP.Check.Place)
+                        bash <(curl -Ls https://Check.Place) -N
                         read -p "按任意键继续... " pause
                         ;;
                     7)
                         add_sshpasswd
+                        read -p "按任意键继续... " pause
+                        ;;
+                    8)
+                        clear
+                        echo "SSL证书申请"
+                        bash <(curl -Ls https://raw.githubusercontent.com/IceCokei/myScripts/refs/heads/main/JS/cert.sh)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    9)
+                        clear
+                        echo "TCP调优"
+                        wget -q https://raw.githubusercontent.com/BlackSheep-cry/TCP-Optimization-Tool/main/tool.sh -O tcp_tool.sh && chmod +x tcp_tool.sh && ./tcp_tool.sh
+                        read -p "按任意键继续... " pause
+                        ;;
+                    10)
+                        clear
+                        echo "Gost转发"
+                        wget --no-check-certificate -O gost.sh https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.sh && chmod +x gost.sh && ./gost.sh
+                        read -p "按任意键继续... " pause
+                        ;;
+                    11)
+                        clear
+                        echo "融合怪VPS测评"
+                        bash <(wget -qO- bash.spiritlhl.net/ecs)
+                        read -p "按任意键继续... " pause
+                        ;;
+                    12)
+                        clear
+                        echo "=========================================="
+                        echo "           DD重装系统"
+                        echo "=========================================="
+                        echo "⚠️  警告：此操作将重装系统，所有数据将被清除！"
+                        echo ""
+                        echo "支持的系统："
+                        echo "1.  Debian 11 (默认)"
+                        echo "2.  Debian 12"
+                        echo "3.  Ubuntu 22.04"
+                        echo "4.  Ubuntu 24.04"
+                        echo "5.  CentOS 9"
+                        echo "6.  Rocky 9"
+                        echo "7.  AlmaLinux 9"
+                        echo "8.  Fedora 43"
+                        echo "9.  Alpine 3.23"
+                        echo "10. OpenSUSE 15.6"
+                        echo "11. Arch Linux"
+                        echo "12. 自定义参数"
+                        echo "0.  取消"
+                        echo ""
+                        read -p "请选择要安装的系统 [1-12]: " dd_choice
+                        
+                        case $dd_choice in
+                            1)
+                                DD_CMD="bash reinstall.sh debian 11"
+                                ;;
+                            2)
+                                DD_CMD="bash reinstall.sh debian 12"
+                                ;;
+                            3)
+                                DD_CMD="bash reinstall.sh ubuntu 22.04"
+                                ;;
+                            4)
+                                DD_CMD="bash reinstall.sh ubuntu 24.04"
+                                ;;
+                            5)
+                                DD_CMD="bash reinstall.sh centos 9"
+                                ;;
+                            6)
+                                DD_CMD="bash reinstall.sh rocky 9"
+                                ;;
+                            7)
+                                DD_CMD="bash reinstall.sh almalinux 9"
+                                ;;
+                            8)
+                                DD_CMD="bash reinstall.sh fedora 43"
+                                ;;
+                            9)
+                                DD_CMD="bash reinstall.sh alpine 3.23"
+                                ;;
+                            10)
+                                DD_CMD="bash reinstall.sh opensuse 15.6"
+                                ;;
+                            11)
+                                DD_CMD="bash reinstall.sh arch"
+                                ;;
+                            12)
+                                echo ""
+                                echo "自定义参数示例："
+                                echo "  debian 11"
+                                echo "  ubuntu 24.04 --minimal"
+                                echo "  centos 10 --password MyPassword123"
+                                echo ""
+                                read -p "请输入完整参数: " custom_params
+                                DD_CMD="bash reinstall.sh $custom_params"
+                                ;;
+                            0)
+                                echo "已取消操作"
+                                read -p "按任意键继续... " pause
+                                continue
+                                ;;
+                            *)
+                                echo "❌ 无效选项"
+                                read -p "按任意键继续... " pause
+                                continue
+                                ;;
+                        esac
+                        
+                        echo ""
+                        echo "即将执行: $DD_CMD"
+                        read -p "确认继续？(y/n): " confirm
+                        if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+                            curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O reinstall.sh https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh
+                            eval $DD_CMD
+                        else
+                            echo "已取消操作"
+                        fi
                         read -p "按任意键继续... " pause
                         ;;
                     0)
@@ -334,6 +453,29 @@ case $choice in
                     echo "无效的端口号。请确保您输入一个在1024到65535之间的数字。"
                     read -p "按任意键继续... " pause
                 fi
+                ;;
+            2)
+                clear
+                echo "正在安装V2bX后端面板..."
+                wget -N https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh && bash install.sh
+                read -p "按任意键继续... " pause
+                ;;
+            3)
+                clear
+                echo "正在替换V2bX证书路径..."
+                sed -i 's#"CertFile": "/etc/V2bX/fullchain.cer"#"CertFile": "/root/cert.crt"#' /etc/V2bX/config.json
+                sed -i 's#"KeyFile": "/etc/V2bX/cert.key"#"KeyFile": "/root/private.key"#' /etc/V2bX/config.json
+                echo "证书路径替换完成 ✅"
+                echo "新的证书路径："
+                echo "  CertFile: /root/cert.crt"
+                echo "  KeyFile: /root/private.key"
+                read -p "按任意键继续... " pause
+                ;;
+            4)
+                clear
+                echo "正在安装宝塔面板..."
+                URL=https://www.aapanel.com/script/install_6.0_en.sh && if [ -f /usr/bin/curl ];then curl -ksSO "$URL" ;else wget --no-check-certificate -O install_6.0_en.sh "$URL";fi;bash install_6.0_en.sh aapanel
+                read -p "按任意键继续... " pause
                 ;;
         0)
             break
