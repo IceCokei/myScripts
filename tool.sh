@@ -446,17 +446,6 @@ case $choice in
         0)
             break
             ;;
-                read -p "按任意键继续... " pause
-                ;;
-            4)
-                clear
-                echo "正在安装宝塔面板..."
-                URL=https://www.aapanel.com/script/install_6.0_en.sh && if [ -f /usr/bin/curl ];then curl -ksSO "$URL" ;else wget --no-check-certificate -O install_6.0_en.sh "$URL";fi;bash install_6.0_en.sh aapanel
-                read -p "按任意键继续... " pause
-                ;;
-        0)
-            break
-            ;;
         *)
             clear
             echo "❌无效选项 $panel_choice"
