@@ -36,9 +36,8 @@ function display_main_menu {
     echo "1. 系统信息查询"
     echo "2. Docker 管理 > "
     echo "3. 实用工具 > "
-    echo "4. WARP 管理 ▶ 解锁🔓ChatGPT / Netfilx "
+    echo "4. 常用面板安装 >"
     echo "5. BBR加速管理 >"
-    echo "6. 常用面板安装 >"
     echo "0. 退出"
     echo "00. 版本日志"
     
@@ -74,10 +73,10 @@ function display_docker_menu {
 function display_panel_menu {
     clear
     echo "常用面板管理"
-    echo "1. 安装青龙 2.10.12版本"
+    echo "1. 安装宝塔面板"
     echo "2. 安装V2bX后端面板"
     echo "3. 一键替换V2bX证书路径"
-    echo "4. 安装宝塔面板"
+    echo "4. 安装青龙 2.10.12版本"
     echo "0. 返回上一级"
 }
 
@@ -361,45 +360,35 @@ case $choice in
             done
             ;;
         4)
-        clear
-        # 检查并安装 wget（如果需要）
-            if ! command -v wget &>/dev/null; then
-                if command -v apt &>/dev/null; then
-                apt update -y && apt install -y wget
-            elif command -v yum &>/dev/null; then
-                yum -y update && yum -y install wget
-            else
-                echo "未知的包管理器!"
-                exit 1
-                fi
-            fi
-        wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token]
-        read -p "按任意键继续... " pause
-        ;;
-        5)
-        clear
-        # 检查并安装 wget（如果需要）
-            if ! command -v wget &>/dev/null; then
-                if command -v apt &>/dev/null; then
-                apt update -y && apt install -y wget
-            elif command -v yum &>/dev/null; then
-                yum -y update && yum -y install wget
-            else
-                echo "未知的包管理器!"
-                exit 1
-                fi
-            fi
-        wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh
-        chmod +x tcpx.sh
-        ./tcpx.sh
-        ;;
-        6)
             while :; do
             display_panel_menu
             read -p "请选择你的的操作: " panel_choice
 
             case $panel_choice in
             1)
+                clear
+                echo "正在安装宝塔面板..."
+                URL=https://www.aapanel.com/script/install_6.0_en.sh && if [ -f /usr/bin/curl ];then curl -ksSO "$URL" ;else wget --no-check-certificate -O install_6.0_en.sh "$URL";fi;bash install_6.0_en.sh aapanel
+                read -p "按任意键继续... " pause
+                ;;
+            2)
+                clear
+                echo "正在安装V2bX后端面板..."
+                wget -N https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh && bash install.sh
+                read -p "按任意键继续... " pause
+                ;;
+            3)
+                clear
+                echo "正在替换V2bX证书路径..."
+                sed -i 's#"CertFile": "/etc/V2bX/fullchain.cer"#"CertFile": "/root/cert.crt"#' /etc/V2bX/config.json
+                sed -i 's#"KeyFile": "/etc/V2bX/cert.key"#"KeyFile": "/root/private.key"#' /etc/V2bX/config.json
+                echo "证书路径替换完成 ✅"
+                echo "新的证书路径："
+                echo "  CertFile: /root/cert.crt"
+                echo "  KeyFile: /root/private.key"
+                read -p "按任意键继续... " pause
+                ;;
+            4)
                 clear
                 # 检测是否安装了Docker
                 if ! command -v docker &>/dev/null; then
@@ -454,21 +443,9 @@ case $choice in
                     read -p "按任意键继续... " pause
                 fi
                 ;;
-            2)
-                clear
-                echo "正在安装V2bX后端面板..."
-                wget -N https://raw.githubusercontent.com/wyx2685/V2bX-script/master/install.sh && bash install.sh
-                read -p "按任意键继续... " pause
-                ;;
-            3)
-                clear
-                echo "正在替换V2bX证书路径..."
-                sed -i 's#"CertFile": "/etc/V2bX/fullchain.cer"#"CertFile": "/root/cert.crt"#' /etc/V2bX/config.json
-                sed -i 's#"KeyFile": "/etc/V2bX/cert.key"#"KeyFile": "/root/private.key"#' /etc/V2bX/config.json
-                echo "证书路径替换完成 ✅"
-                echo "新的证书路径："
-                echo "  CertFile: /root/cert.crt"
-                echo "  KeyFile: /root/private.key"
+        0)
+            break
+            ;;
                 read -p "按任意键继续... " pause
                 ;;
             4)
@@ -482,12 +459,29 @@ case $choice in
             ;;
         *)
             clear
-            echo "❌无效选项 $choice"
+            echo "❌无效选项 $panel_choice"
             read -p "按任意键继续... " pause
             ;;
                 esac
             done
             ;;
+        5)
+        clear
+        # 检查并安装 wget（如果需要）
+            if ! command -v wget &>/dev/null; then
+                if command -v apt &>/dev/null; then
+                apt update -y && apt install -y wget
+            elif command -v yum &>/dev/null; then
+                yum -y update && yum -y install wget
+            else
+                echo "未知的包管理器!"
+                exit 1
+                fi
+            fi
+        wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh
+        chmod +x tcpx.sh
+        ./tcpx.sh
+        ;;
         00)
             clear
             echo -e "$MESSAGE"  
