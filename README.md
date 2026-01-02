@@ -11,3 +11,7 @@
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/IceCokei/myScripts/main/tool.sh)"
 ```
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=IceCokei/myScripts&type=timeline&legend=top-left)](https://www.star-history.com/#IceCokei/myScripts&type=timeline&legend=top-left)
