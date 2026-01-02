@@ -14,4 +14,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/IceCokei/myScripts/main/
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=IceCokei/myScripts&type=timeline&legend=top-left)](https://www.star-history.com/#IceCokei/myScripts&type=timeline&legend=top-left)
+<a href="https://www.star-history.com/#IceCokei/myScripts&type=timeline&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=IceCokei/myScripts&type=timeline&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=IceCokei/myScripts&type=timeline&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=IceCokei/myScripts&type=timeline&legend=top-left" />
+ </picture>
+</a>
