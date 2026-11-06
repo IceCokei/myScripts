@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 #BY:Coke
 #Time:2024-8-8
@@ -39,23 +39,26 @@ show_progress() {
     for ((i=step; i<total_steps; i++)); do
         echo -ne " "
     done
-    echo -ne " (${step}/${total_steps})\r"
+    echo -e " (${step}/${total_steps})"
 }
 
 install_dependencies() {
     if [ "$(uname)" = "Darwin" ]; then
-        echo "检测并安装macOS依赖..."
-        if ! command -v brew &> /dev/null; then
-            echo "Homebrew 未安装，开始安装..."
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "检测macOS依赖..."
+        if ! command -v docker &> /dev/null; then
+            echo "未检测到 Docker，请先安装并启动 Docker Desktop 后重试。"
+            exit 1
         fi
-        brew install pv
     else
         echo "环境依赖已具备 🍻 开始安装..."
     fi
 }
 
-random_port=$(( ( RANDOM % 64512 ) + 1024 ))
+# 避开 frps 服务端占用端口 (bindPort 1341 / Dashboard 13442)
+while :; do
+    random_port=$(( ( RANDOM % 64512 ) + 1024 ))
+    [ "$random_port" != 1341 ] && [ "$random_port" != 13442 ] && break
+done
 
 # 检测系统并设置路径
 if [ "$(uname)" = "Darwin" ]; then
@@ -71,7 +74,7 @@ fi
 
 install_dependencies
 
-total_steps=12
+total_steps=13
 current_step=0
 
 # 创建目录
@@ -98,7 +101,6 @@ show_progress "生成 frpc.toml 配置文件" $current_step $total_steps
 
 # 生成 docker-compose.yml 配置文件
 cat >$docker_data_path/docker-compose.yml << EOF
-version: '3.3'
 services:
     frpc:
         restart: always
@@ -128,7 +130,13 @@ fi
 current_step=$((current_step + 1))
 show_progress "检查/安装 Docker" $current_step $total_steps
 
-if ! command -v docker-compose &> /dev/null; then
+if docker compose version &> /dev/null; then
+    COMPOSE="docker compose"
+    echo "Docker Compose 已安装，版本信息: $(docker compose version)"
+elif command -v docker-compose &> /dev/null; then
+    COMPOSE="docker-compose"
+    echo "Docker Compose 已安装，版本信息: $(docker-compose --version)"
+else
     echo "Docker Compose 未安装，开始安装..."
     curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
@@ -136,11 +144,9 @@ if ! command -v docker-compose &> /dev/null; then
         echo "Docker Compose 安装失败，请检查安装脚本或手动安装。"
         exit 1
     else
+        COMPOSE="docker-compose"
         echo "Docker Compose 安装成功！"
     fi
-else
-    docker_compose_version=$(docker-compose --version)
-    echo "Docker Compose 已安装，版本信息: $docker_compose_version"
 fi
 current_step=$((current_step + 1))
 show_progress "检查/安装 Docker Compose" $current_step $total_steps
@@ -182,7 +188,7 @@ current_step=$((current_step + 1))
 show_progress "启动相关 Docker 容器 miaospeed" $current_step $total_steps
 
 cd $docker_data_path
-docker-compose up -d
+$COMPOSE up -d
 current_step=$((current_step + 1))
 show_progress "启动相关 Docker 容器 frpc" $current_step $total_steps
 
