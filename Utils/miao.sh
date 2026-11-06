@@ -82,9 +82,9 @@ show_progress "创建目录" $current_step $total_steps
 # 生成 frpc.toml 配置文件
 cat >$docker_data_path/frpc.toml << EOF
 transport.tls.enable = true
-serverAddr = "42.192.154.218"
-serverPort = 10088
-auth.token = "Sh96pZotGkJE2Fkw3fr6gjxYxYne7sIcbGOKdgyWwUXEcCUmDW7TrrsfjjrH8XNB"
+serverAddr = "140.143.185.20"
+serverPort = 1341
+auth.token = "NWN4CJB7NFzZp4WRgKWfbnap"
 
 [[proxies]]
 name = "miaospeed.$random_port"
